@@ -1,0 +1,20 @@
+stages:                                   ## Order of execution
+  - alpha
+  - bravo
+
+BUILD_RF_IMG:
+  stage: alpha
+
+RF_EX_ASSESSMENT:
+  stage: bravo
+  variables:
+    ASSESSMENT_COVERAGE: "full"      # ex0, ex1, ex2, ex3, ex4, full (all exercises)
+  artifacts:
+    paths: ["./results", "./data"]
+  script:
+    - |
+      ./scripts/run_assessments.sh --variable tag:"${ASSESSMENT_COVERAGE}"
+          robot_rc=$?
+  after_script:
+    - |
+      echo "### Execution finished ###"
