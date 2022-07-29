@@ -1,0 +1,7 @@
+lxml
+html5lib
+beautifulsoup4
+robotframework
+robotframework-browser
+robotframework-requests
+robotframework-excellib
