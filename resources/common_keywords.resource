@@ -1,9 +1,6 @@
 *** Settings ***
 Library           ../libraries/MyLibrary.py
 
-*** Variables ***
-${IMAGE_COMPARATOR_COMMAND}   C:${/}ImageMagick-7.1.0-Q16-HDRI${/}magick.exe
-
 # Here are general keywords shared by multiple tests
 *** Keywords ***
 Initiate Assessment Support
@@ -45,12 +42,3 @@ Save Task Score To Results Summary Sheet
   ${score}  Convert To Number  ${score}
   Write Excel Cell  row_num=${student_row}  col_num=${task_col}  value=${score}
   Save Excel Document  filename=${results_dir}DTEK2040_Part_0.xlsx
-
-# Compare Images
-#    [Arguments]  ${Reference_Image_Path}  ${Test_Image_Path}  ${Allowed_Threshold}
-#    ${TEMP}  Replace String  ${IMAGE_COMPARATOR_COMMAND}  __REFERENCE__  ${Reference_Image_Path}
-#    ${COMMAND}  Replace String  ${TEMP}  __TEST__  ${Test_Image_Path}
-#    ${RC}  ${OUTPUT}  Run And Return Rc And Output  ${COMMAND}
-#    Log  ${OUTPUT}
-#    ${RESULT}  Evaluate  ${OUTPUT} < ${Allowed_Threshold}
-#    [Return]  ${RESULT}
