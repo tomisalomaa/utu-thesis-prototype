@@ -4,10 +4,6 @@ SUBMISSIONDIR="$(realpath "${DIR}/../data/submissions/")"
 SUTDIR="$(realpath "${DIR}/../data/test-subjects/")"
 ROBOTDIR="$(realpath "${DIR}/../tests/")"
 
-echo ${SUBMISSIONDIR}
-echo ${SUTDIR}
-echo ${ROBOTDIR}
-
 echo Extracting packaged submissions FROM data/submissions/ TO data/test-subjects/ ...
 
 # Extracting zipped submissions
@@ -26,7 +22,7 @@ for sut in ${SUTDIR}/* ; do
   echo "$sut"
   robot \
     -d ${ROBOTDIR}/../results/"$sut"/ \
-    -i ex0 \
+    -i ${tag} \
     -v STUDENT_ID="$sut" \
     -v STUDENT_REPORT_ROW=${summaryRowPos} \
     ${ROBOTDIR}/assessment-cases.robot

@@ -33,29 +33,41 @@ class MyLibrary:
         return file_location
 
     # Parse support - cannot be used in static assessment since BS4 "corrects" mistakes
-    def search_doctype_from_html(self, src):
+    def search_doctype_from_html(self, src, parser='html5lib'):
         items = []
-        soup = self.prepare_soup(src, 'html5lib')
+        soup = self.prepare_soup(src, parser)
         for item in soup.contents:
             if isinstance(item, Doctype):
                 items.append(item)
         return items
 
+    def format_soup_tag_to_string(self, soup):
+        string_form = []
+        for item in soup:
+            string_form.append(str(item))
+        return string_form
+
     # Parse support
-    def find_element_from_html(self, src, elem):
-        soup = self.prepare_soup(src, 'html5lib')
+    def find_all_ids_from_html(self, src, parser='html5lib'):
+        soup = self.prepare_soup(src, parser)
+        found_ids = soup.find_all(id=True)
+        return found_ids
+
+    # Parse support
+    def find_element_from_html(self, src, elem, parser='html5lib'):
+        soup = self.prepare_soup(src, parser)
         found_element = soup.find(elem)
         return found_element
     
     # Parse support
-    def find_elements_from_html(self, src, elem):
-        soup = self.prepare_soup(src, 'html5lib')
+    def find_elements_from_html(self, src, elem, parser='html5lib'):
+        soup = self.prepare_soup(src, parser)
         found_elements = soup.find_all(elem)
         return found_elements
     
     # Parse support
-    def find_elements_with_attribute(self, src, elem_tag, attr):
-        soup = self.prepare_soup(src, 'html5lib')
+    def find_elements_with_attribute(self, src, elem_tag, attr, parser='html5lib'):
+        soup = self.prepare_soup(src, parser)
         found_elements = soup.find_all(elem_tag, {attr:True})
         return found_elements
     
@@ -63,6 +75,12 @@ class MyLibrary:
     def find_immediate_child_elements(self, src):
         children = [child for child in src if child.name != None]
         return children
+
+    # Parse support
+    def find_elements_by_class(self, src, elem, cls, parser='html5lib'):
+        soup = self.prepare_soup(src, parser)
+        elems = soup.select(f'{elem}.{cls}')
+        return elems
 
     # Parse support
     '''
@@ -85,7 +103,12 @@ class MyLibrary:
             elem = re.sub(regex_clean_content, '> <', elem, flags=re.IGNORECASE | re.DOTALL)
             element_results.append(elem)
         return element_results
-    
+
+    # Parse support
+    '''
+    Does not fix the raw content as html parsers do;
+    performs string searches from raw text source.
+    '''
     def parent_child_relations_from_list(self, str_list):
         length = len(str_list)
         parent_child_dict = {}
