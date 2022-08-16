@@ -1,6 +1,7 @@
 #!/bin/bash
 DIR=$(dirname "$0")
 SUBMISSIONDIR="$(realpath "${DIR}/../data/submissions/")"
+mkdir ${DIR}/../data/test-subjects/
 SUTDIR="$(realpath "${DIR}/../data/test-subjects/")"
 ROBOTDIR="$(realpath "${DIR}/../tests/")"
 
