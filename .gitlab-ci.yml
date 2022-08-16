@@ -4,17 +4,25 @@ stages:                                   ## Order of execution
 
 BUILD_RF_IMG:
   stage: alpha
+  image: docker
+  services:
+    - docker:dind
+  script:
+    - echo $CI_REGISTRY_PASSWORD | docker login -u $CI_REGISTRY_USER $CI_REGISTRY --password-stdin
+    - docker build -t $CI_REGISTRY_IMAGE .
+    - docker push $CI_REGISTRY_IMAGE
 
 RF_EX_ASSESSMENT:
   stage: bravo
+  image: $CI_REGISTRY_IMAGE
   variables:
     ASSESSMENT_COVERAGE: "full"      # ex0, ex1, ex2, ex3, ex4, full (all exercises)
   artifacts:
-    paths: ["./results", "./data"]
+    paths: ["./results", "./reports", "./data/test-subjects"]
   script:
     - |
-      ./scripts/run_assessments.sh --variable tag:"${ASSESSMENT_COVERAGE}"
-          robot_rc=$?
+      ./scripts/run_pipeline.sh
+      robot_rc=$?
   after_script:
     - |
       echo "### Execution finished ###"

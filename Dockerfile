@@ -25,4 +25,4 @@ RUN apt-get -y update && apt-get -y upgrade \
     && apt-get autoremove -y \
     && apt-get clean
 WORKDIR /opt/rf/
-#ENTRYPOINT ["./scripts/run_assessment.sh"]
+#ENTRYPOINT ["./scripts/run_pipeline.sh"]
