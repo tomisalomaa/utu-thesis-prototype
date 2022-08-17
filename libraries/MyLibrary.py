@@ -14,7 +14,7 @@ class MyLibrary:
     # General support
     def search_file_with_extension(self, path, file_extension):
         '''
-        Returns the first file location found with specified extension
+        Returns all file locations found with specified extension
         from the given path.
         :param path: Path that will be searched within. Must end with '/'.
         :param file_extension: The extension (type) of the file being searched for.
@@ -22,17 +22,16 @@ class MyLibrary:
             NOT '.html' or '.css'.
         '''
         file_extension = str.lower('*.' + file_extension)
+        file_locations = []
         file_location = ''
         for root, dirs, files in os.walk(path, topdown=True):
             for name in files:
                 if fnmatch.fnmatch(str.lower(name), file_extension):
                     file_location = os.path.join(root, name)
-                    break
-            if file_location:
-                break
-        return file_location
+                    file_locations.append(file_location)
+        return file_locations
 
-    # Parse support - cannot be used in static assessment since BS4 "corrects" mistakes
+    # Parse support - cannot be used in static assessment since html parser "corrects" mistakes
     def search_doctype_from_html(self, src, parser='html5lib'):
         items = []
         soup = self.prepare_soup(src, parser)

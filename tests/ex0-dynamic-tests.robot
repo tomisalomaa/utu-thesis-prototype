@@ -9,7 +9,7 @@ Library         ..${/}libraries${/}MyLibrary.py
 Variables       ..${/}variables${/}common_variables.py
 Resource        ..${/}resources${/}common_keywords.resource
 Suite Setup     Initiate Dynamic Testing
-Suite Teardown  End Dynamic Testing
+Suite Teardown  End Testing
 
 *** Test Cases ***
 E0-T1-5: Page contains a valid image element
@@ -159,8 +159,8 @@ E0-T2-4: Specificity is used in styling
     ${list_specificity}  Verify Specificity Use Based On Styles Count  ${list_dict}  menu
   END
   Close Page
-  Should Be True  ${table_specificity}
-  Should Be True  ${list_specificity}
+  ${specificity_used}  Evaluate  ${table_specificity} or ${list_specificity}
+  Should Be True  ${specificity_used}
 
 *** Keywords ***
 Initiate Dynamic Testing
@@ -169,10 +169,6 @@ Initiate Dynamic Testing
   ${html_file}  Search Local HTML Main Page Location  ${TEST_SUBJECT_DIR}
   Should Not Be Empty  ${html_file}
   Set Global Variable  ${HTML_FILE}  ${html_file}
-
-End Dynamic Testing
-  Save Excel Document  ${CURDIR}${/}..${/}reports${/}DTEK2040_assessment_summary.xlsx
-  Close Current Excel Document
 
 Append Path To File Found From Index Html
   [Arguments]  ${src}
