@@ -9,7 +9,7 @@ Library         ..${/}libraries${/}MyLibrary.py
 Variables       ..${/}variables${/}common_variables.py
 Resource        ..${/}resources${/}common_keywords.resource
 Suite Setup     Initiate Static Testing
-Suite Teardown  End Static Testing
+Suite Teardown  End Testing
 
 *** Test Cases ***
 E0-T1-1: Verify Html Anatomy
@@ -354,21 +354,13 @@ Check If URL Contains Path
   ${img_contains_path}  Get Regexp Matches  ${src}  \\.\\/|[a-z0-9]\\/[a-z0-9]
   [Return]  ${img_contains_path}
 
-Search Local HTML Main Page Location
-  [Arguments]  ${submission_dir}
-  ${html_file_location}  Search File With Extension  ${submission_dir}  html
-  [Return]  ${html_file_location}
-
 Initiate Static Testing
   Open Excel Document  ${CURDIR}${/}..${/}reports${/}DTEK2040_assessment_summary.xlsx  doc01
   Insert Submission Id To Results Summary Sheet  ${STUDENT_REPORT_ROW}  ${STUDENT_ID}
   ${html_file}  Search Local HTML Main Page Location  ${TEST_SUBJECT_DIR}
   Should Not Be Empty  ${html_file}
   Set Global Variable  ${HTML_FILE}  ${html_file}
-  ${css_file}  Search File With Extension  ${TEST_SUBJECT_DIR}  css
+  ${css_files}  Search File With Extension  ${TEST_SUBJECT_DIR}  css
+  ${css_file}  Get File With Most Lines  ${css_files}
   Should Not Be Empty  ${css_file}
   Set Global Variable  ${CSS_FILE}  ${css_file}
-
-End Static Testing
-  Save Excel Document  ${CURDIR}${/}..${/}reports${/}DTEK2040_assessment_summary.xlsx
-  Close Current Excel Document
