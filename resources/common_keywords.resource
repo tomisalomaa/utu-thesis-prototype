@@ -44,6 +44,7 @@ Search Local HTML Main Page Location
 
 Insert Submission Id To Results Summary Sheet
   [Arguments]  ${student_row}  ${id}
+  # sheet functions need to be tackled (or "hard calculated")
   ${sum_function}  Set Variable  =SUMMA(D4:AB4)
   Log  ${sum_function}
   Write Excel Cell  row_num=${student_row}  col_num=1  value=${id}
