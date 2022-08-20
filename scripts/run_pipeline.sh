@@ -26,6 +26,13 @@ then
     export RESULTS_DIR="$(realpath "$DIR/results")"
     export TESTS_DIR="$(realpath "$DIR/tests")"
     export TASKS_DIR="$(realpath "$DIR/tasks")"
+    # export test scope tag for robot tests
+    export TAG="full"
+    # export report manipulation related params
+    export FIRST_ID_POSITION=4
+    # export exercise scoring params -- max score from programming tasks
+    export EX0_MAX_SCORE=2
+
     echo Global variables updated
     echo ================
     echo STARTING STEP 2
