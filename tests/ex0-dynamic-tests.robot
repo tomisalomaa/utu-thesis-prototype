@@ -9,7 +9,6 @@ Library         ..${/}libraries${/}MyLibrary.py
 Variables       ..${/}variables${/}common_variables.py
 Resource        ..${/}resources${/}common_keywords.resource
 Suite Setup     Initiate Dynamic Testing
-Suite Teardown  End Testing
 
 *** Test Cases ***
 E0-T1-5: Page contains a valid image element
@@ -43,8 +42,7 @@ E0-T1-5: Page contains a valid image element
     END
   END
   Close Page
-  Run Keyword And Warn On Failure
-  ...  Should Be True  ${verified_img_results['pass']} > 0
+  Should Be True  ${verified_img_results['pass']} > 0
 
 E0-T1-6: Page contains a form with input elements
   [Documentation]  Page has at least one form element containing input elements.
@@ -71,8 +69,7 @@ E0-T1-6: Page contains a form with input elements
     END
   END
   Close Page
-  Run Keyword And Warn On Failure
-    ...  Should Be True  ${verified_form_inputs['pass']} > 0
+  Should Be True  ${verified_form_inputs['pass']} > 0
 
 E0-T2-4: Specificity is used in styling
   [Documentation]  Verify that specificity is used to make one row or cell in a table
@@ -164,8 +161,7 @@ E0-T2-4: Specificity is used in styling
 
 *** Keywords ***
 Initiate Dynamic Testing
-  Open Excel Document  ${CURDIR}${/}..${/}reports${/}DTEK2040_assessment_summary.xlsx  doc01
-  Insert Submission Id To Results Summary Sheet  ${STUDENT_REPORT_ROW}  ${STUDENT_ID}
+  Log  ${TEST_SUBJECT_DIR}
   ${html_file}  Search Local HTML Main Page Location  ${TEST_SUBJECT_DIR}
   Should Not Be Empty  ${html_file}
   Set Global Variable  ${HTML_FILE}  ${html_file}

@@ -9,7 +9,6 @@ Library         ..${/}libraries${/}MyLibrary.py
 Variables       ..${/}variables${/}common_variables.py
 Resource        ..${/}resources${/}common_keywords.resource
 Suite Setup     Initiate Static Testing
-Suite Teardown  End Testing
 
 *** Test Cases ***
 E0-T1-1: Verify Html Anatomy
@@ -90,9 +89,7 @@ E0-T1-3: Page contains a valid table element
     END
   END
   # Verify at least one table passed the structure test.
-  # Allow failing but create a warning as this test only adds to score.
-  Run Keyword And Warn On Failure
-  ...  Should Be True  ${verified_table_results['pass']} > 0
+  Should Be True  ${verified_table_results['pass']} > 0
 
 E0-T1-4: Page contains a valid list element
   [Documentation]  Page has at least one list element that contains proper child elements.
@@ -130,8 +127,7 @@ E0-T1-4: Page contains a valid list element
       ${verified_list_results['fail']}  Evaluate  ${verified_list_results['fail']} + 1
     END
   END
-  Run Keyword And Warn On Failure
-  ...  Should Be True  ${verified_list_results['pass']} > 0
+  Should Be True  ${verified_list_results['pass']} > 0
 
 E0-T2-1: CSS file exists and it is referred in the index html file
   [Documentation]    Search for a css file within the submitted materials.
@@ -145,11 +141,9 @@ E0-T2-1: CSS file exists and it is referred in the index html file
     IF  '${child.name}' == 'link'
       ${rel_content}  Set Variable  ${child}[rel]
       ${href_content}  Set Variable  ${child}[href]
-      ${rel_verified}  Run Keyword And Warn On Failure
-      ...  Run Keyword And Return Status
+      ${rel_verified}  Run Keyword And Return Status
       ...  Should Be Equal As Strings  ${rel_content}[0]  stylesheet
-      ${href_verified}  Run Keyword And Warn On Failure
-      ...  Run Keyword And Return Status
+      ${href_verified}  Run Keyword And Return Status
       ...  Should Contain  ${href_content}  ${css_file_name}
     END
   END
@@ -175,11 +169,9 @@ E0-T2-2: Hover style defined
     ${class_name}  Get Regexp Matches  ${style}  \.(.*?):  1
     ${class_name}  Strip String  ${class_name}[0]  characters=.
     ${class_matches}  Find Elements By Class  ${HTML_FILE}  a  ${class_name}
-    Run Keyword And Warn On Failure
-    ...  Should Be True  ${class_matches}
+    Should Be True  ${class_matches}
   ELSE
-    Run Keyword And Warn On Failure
-    ...  Should Be True  ${hover_styles}
+    Should Be True  ${hover_styles}
   END
 
 E0-T2-3: List and table styles are defined
@@ -277,7 +269,7 @@ E0-T2-5: Id and class selector are used
 
 E0-T2-6: Element position and sizing options are used
   [Documentation]  Ids and class selectors are used to define styles.
-  [Tags]  ex0  e0t2  full  uusi
+  [Tags]  ex0  e0t2  full
   
   @{position_support_words}  Create List  margin  padding  position  align  top  right  left  bottom
   @{size_support_words}  Create List  height  width  size
@@ -292,6 +284,16 @@ E0-T2-6: Element position and sizing options are used
   Should Contain Any  ${styles_string}  @{size_support_words}
 
 *** Keywords ***
+Initiate Static Testing
+  Log  ${TEST_SUBJECT_DIR}
+  ${html_file}  Search Local HTML Main Page Location  ${TEST_SUBJECT_DIR}${/}
+  Should Not Be Empty  ${html_file}
+  Set Global Variable  ${HTML_FILE}  ${html_file}
+  ${css_files}  Search File With Extension  ${TEST_SUBJECT_DIR}  css
+  ${css_file}  Get File With Most Lines  ${css_files}
+  Should Not Be Empty  ${css_file}
+  Set Global Variable  ${CSS_FILE}  ${css_file}
+
 Sanitize Empty Spaces From Strings
   [Arguments]  ${strings}
   @{new_list}  Create List
@@ -353,14 +355,3 @@ Check If URL Contains Path
   [Arguments]  ${src}
   ${img_contains_path}  Get Regexp Matches  ${src}  \\.\\/|[a-z0-9]\\/[a-z0-9]
   [Return]  ${img_contains_path}
-
-Initiate Static Testing
-  Open Excel Document  ${CURDIR}${/}..${/}reports${/}DTEK2040_assessment_summary.xlsx  doc01
-  Insert Submission Id To Results Summary Sheet  ${STUDENT_REPORT_ROW}  ${STUDENT_ID}
-  ${html_file}  Search Local HTML Main Page Location  ${TEST_SUBJECT_DIR}
-  Should Not Be Empty  ${html_file}
-  Set Global Variable  ${HTML_FILE}  ${html_file}
-  ${css_files}  Search File With Extension  ${TEST_SUBJECT_DIR}  css
-  ${css_file}  Get File With Most Lines  ${css_files}
-  Should Not Be Empty  ${css_file}
-  Set Global Variable  ${CSS_FILE}  ${css_file}
