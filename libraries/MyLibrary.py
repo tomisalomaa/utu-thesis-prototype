@@ -112,7 +112,10 @@ class MyLibrary:
         length = len(str_list)
         parent_child_dict = {}
         met_parents = []
+        print(met_parents)
         for i in range(length):
+            print(met_parents)
+            print(str_list[i][1])
             if str_list[i][1] != '/':
                 if i-1 >= 0:
                     if met_parents[0] in parent_child_dict:
@@ -122,6 +125,4 @@ class MyLibrary:
                 met_parents.insert(0, str_list[i])
             else:
                 met_parents.pop(0)
-        print(met_parents)
-        print(parent_child_dict)
         return parent_child_dict
