@@ -22,15 +22,7 @@ E0-T1-1: Verify Html Anatomy
   [Tags]  ex0  e0t1  full
   
   # Check source code for elements: html, head, body
-  ${html_element}  Find Element From Html  ${HTML_FILE}  html
-  Should Not Be Empty  ${html_element}
-  ${head_element}  Find Element From Html  ${HTML_FILE}  head
-  Should Not Be Empty  ${html_element}
-  ${body_element}  Find Element From Html  ${HTML_FILE}  body
-  Should Not Be Empty  ${body_element}
-  # Check for doctype declaration
-  ${doctype}  Search Doctype From Html  ${HTML_FILE}
-  Should Be Equal  ${doctype}[0]  html
+  ${html_contents}  Get File  ${HTML_FILE}
   # Open a browser session with the static html page
   New Page  file://${HTML_FILE}
   # Take a screenshot of the page for records and added transparency / visibility
@@ -38,6 +30,15 @@ E0-T1-1: Verify Html Anatomy
   # With above steps the test case verifies that the file could function as a valid
   # static page when viewed on a browser.
   Close Page
+  # Verify html, head and body elements and the doctype declaration
+  ${html_element}  Get Regexp Matches  ${html_contents}  <html>|<\\/html>
+  ${head_element}  Get Regexp Matches  ${html_contents}  <head>|<\\/head>
+  ${body_element}  Get Regexp Matches  ${html_contents}  <body>|<\\/body>
+  ${doctype}  Get Regexp Matches  ${html_contents}  <!DOCTYPE html>
+  Should Not Be Empty  ${html_element}
+  Should Not Be Empty  ${head_element}
+  Should Not Be Empty  ${body_element}
+  Should Not Be Empty  ${doctype}
 
 E0-T1-2: Page contains a valid anchor element
   [Documentation]  Page should have at least one anchor elment with a href attribute.
@@ -73,23 +74,12 @@ E0-T1-3: Page contains a valid table element
   ...  If <tbody> is not used then <tr> can be used directly under <table>.
   [Tags]  ex0  e0t1  full
 
-  &{verified_table_results}  Create Dictionary  pass=${0}  fail=${0}
   # Find table elements from the raw html file
   ${table_elements}  Find Elements From Raw Source  ${html_file}  table
   # Validate table hierarchy of each table
-  FOR  ${table}  IN  @{table_elements}
-    @{elements}  Split String  ${table}  ${SPACE}
-    &{relations}  Parent Child Relations From List  ${elements}
-    ${verification_result}  Run Keyword And Return Status
-    ...  Verify Table Element Hierarchy  ${relations}
-    IF  ${verification_result}
-      ${verified_table_results['pass']}  Evaluate  ${verified_table_results['pass']} + 1
-    ELSE
-      ${verified_table_results['fail']}  Evaluate  ${verified_table_results['fail']} + 1
-    END
-  END
+  ${number_of_proper_tables}  Verify Table Elements  ${table_elements}
   # Verify at least one table passed the structure test.
-  Should Be True  ${verified_table_results['pass']} > 0
+  Should Be True  ${number_of_proper_tables} > 0
 
 E0-T1-4: Page contains a valid list element
   [Documentation]  Page has at least one list element that contains proper child elements.
@@ -99,35 +89,15 @@ E0-T1-4: Page contains a valid list element
   ...  A list needs to contain at least one or more of these child elements.
   [Tags]  ex0  e0t1  full
 
-  &{verified_list_results}  Create Dictionary  pass=${0}  fail=${0}
+  ${number_of_proper_lists}  Set Variable  ${0}
   ${ul_elements}  Find Elements From Raw Source  ${html_file}  ul
   ${ol_elements}  Find Elements From Raw Source  ${html_file}  ol
   ${menu_elements}  Find Elements From Raw Source  ${html_file}  menu
-  FOR  ${list}  IN  @{ul_elements}
-    ${verification_result}  Verify List Element Hierarchy  ${list}
-    IF  ${verification_result}
-      ${verified_list_results['pass']}  Evaluate  ${verified_list_results['pass']} + 1
-    ELSE
-      ${verified_list_results['fail']}  Evaluate  ${verified_list_results['fail']} + 1
-    END
-  END
-  FOR  ${list}  IN  @{ol_elements}
-    ${verification_result}  Verify List Element Hierarchy  ${list}
-    IF  ${verification_result}
-      ${verified_list_results['pass']}  Evaluate  ${verified_list_results['pass']} + 1
-    ELSE
-      ${verified_list_results['fail']}  Evaluate  ${verified_list_results['fail']} + 1
-    END
-  END
-  FOR  ${list}  IN  @{menu_elements}
-    ${verification_result}  Verify List Element Hierarchy  ${list}
-    IF  ${verification_result}
-      ${verified_list_results['pass']}  Evaluate  ${verified_list_results['pass']} + 1
-    ELSE
-      ${verified_list_results['fail']}  Evaluate  ${verified_list_results['fail']} + 1
-    END
-  END
-  Should Be True  ${verified_list_results['pass']} > 0
+  ${number_of_proper_ul}  Verify List Elements  ${ul_elements}
+  ${number_of_proper_ol}  Verify List Elements  ${ol_elements}
+  ${number_of_proper_menu}  Verify List Elements  ${menu_elements}
+  ${number_of_proper_lists}  Evaluate  ${number_of_proper_ul} + ${number_of_proper_ol} + ${number_of_proper_menu}
+  Should Be True  ${number_of_proper_lists} > 0
 
 E0-T2-1: CSS file exists and it is referred in the index html file
   [Documentation]    Search for a css file within the submitted materials.
@@ -135,23 +105,9 @@ E0-T2-1: CSS file exists and it is referred in the index html file
   [Tags]  ex0  e0t2  full
 
   ${css_file_dir}  ${css_file_name}  Split String From Right  ${CSS_FILE}  ${/}  max_split=1
-  ${head_element}  Find Element From Html  ${HTML_FILE}  head
-  ${head_children}  Find Immediate Child Elements  ${head_element}
-  FOR  ${child}  IN  @{head_children}
-    IF  '${child.name}' == 'link'
-      ${rel_content}  Set Variable  ${child}[rel]
-      ${href_content}  Set Variable  ${child}[href]
-      ${rel_verified}  Run Keyword And Return Status
-      ...  Should Be Equal As Strings  ${rel_content}[0]  stylesheet
-      ${href_verified}  Run Keyword And Return Status
-      ...  Should Contain  ${href_content}  ${css_file_name}
-    END
-  END
-  IF  ${rel_verified} and ${href_verified}
-    Log  Stylesheet referred to correctly from html
-  ELSE
-    Log  Stylesheet incorrectly referred to from html
-  END
+  ${html_file_contents}  Get File  ${HTML_FILE}
+  ${css_link}  Get Regexp Matches  ${html_file_contents}  <\s*?link.*?rel="stylesheet".*?>
+  Should Match Regexp  ${css_link}[0]  href\\s*?=\\s*?".*?${css_file_name}\\s*?"
 
 E0-T2-2: Hover style defined
   [Documentation]  Hover styling for an anchor element is verifiably implemented.
@@ -177,9 +133,13 @@ E0-T2-2: Hover style defined
 E0-T2-3: List and table styles are defined
   [Documentation]  Styles are defined for lists and tables.
   ...  Additionally the tasker requires the use of classes and
-  ...  ids to define styles; past assessments have, however,
+  ...  ids to define styles; Past assessments have, however,
   ...  given full scores even if tables and lists specifically
   ...  do not use class or id declarations to define their styles.
+  ...  Also, accepted examples have contained submissions that
+  ...  do not style the <table> or <ol>/<ul> elements but rather
+  ...  their child elements to come up with the stylizations.
+  ...
   ...  Thus checking for the use of styles and classes for styling
   ...  is a test case of it's own.
   ...  Use of these declarations still need to be checked in scope of
@@ -193,84 +153,49 @@ E0-T2-3: List and table styles are defined
   @{list_classes}  Create List
   # Gather table elements from html file
   ${table_elements}  Find Elements From Html  ${HTML_FILE}  table
-  # Store id and class references
-  FOR  ${elem}  IN  @{table_elements}
-    @{elem_items}  Create List  ${elem.get('id')}
-    FOR  ${item}  IN  @{elem_items}
-      IF  '${item}' != 'None'
-        Append To List  ${table_ids}  ${item}
-      END
-    END
-    @{elem_items}  Create List  ${elem.get('class')}
-    FOR  ${item}  IN  @{elem_items}
-      IF  ${item} != None
-        Append To List  ${table_classes}  ${item}[0]
-      END
-    END
-  END
+  ${table_ids}  Store Id References  ${table_elements}
+  ${table_classes}  Store Class References  ${table_elements}
   # Gather list elements from html file
   ${ul_list_elements}  Find Elements From Html  ${HTML_FILE}  ul
   ${ol_list_elements}  Find Elements From Html  ${HTML_FILE}  ol
   ${menu_list_elements}  Find Elements From Html  ${HTML_FILE}  menu
   @{all_list_elements}  Create List  @{ul_list_elements}  @{ol_list_elements}  @{menu_list_elements}
-  # Store id and class references
-  FOR  ${elem}  IN  @{all_list_elements}
-    @{elem_items}  Create List  ${elem.get('id')}
-    FOR  ${item}  IN  @{elem_items}
-      IF  '${item}' != 'None'
-        Append To List  ${list_ids}  ${item}
-      END
-    END
-    @{elem_items}  Create List  ${elem.get('class')}
-    FOR  ${item}  IN  @{elem_items}
-      IF  ${item} != None
-        Append To List  ${list_classes}  @{item}
-      END
-    END
-  END
-  ${css_file_contents}  Get File  ${CSS_FILE}
+  ${list_ids}  Store Id References  ${all_list_elements}
+  ${list_classes}  Store Class References  ${all_list_elements}
   # Verify defined table styles
-  ${table_styles_found}  Get Regexp Matches  ${css_file_contents}  table.*?\\{([^}]+)\\}
-  IF  not ${table_styles_found}
-    ${table_styles_found}  Run Keyword And Return Status
-    ...  Should Contain Any  ${css_file_contents}  @{table_ids}
-    IF  not ${table_styles_found}
-      ${table_styles_found}  Run Keyword And Return Status
-      ...  Should Contain Any  ${css_file_contents}  @{table_classes}
-    END
-  END
+  ${css_file_contents}  Get File  ${CSS_FILE}
+  ${table_styles_found}  Verify Defined Table Styles  ${css_file_contents}  ${table_ids}  ${table_classes}
   # Verify defined list styles
-  ${list_styles_found}  Get Regexp Matches  ${css_file_contents}  ul\\s*?\\{([^}]+)\\}|ol\\s*?\\{([^}]+)\\}|menu\\s*?\\{([^}]+)\\}
-  IF  not ${list_styles_found}
-    ${list_styles_found}  Run Keyword And Return Status
-    ...  Should Contain Any  ${css_file_contents}  @{list_ids}
-    IF  not ${list_styles_found}
-      ${list_styles_found}  Run Keyword And Return Status
-      ...  Should Contain Any  ${css_file_contents}  @{list_classes}
-    END
-  END
+  ${list_styles_found}  Verify Defined List Styles  ${css_file_contents}  ${list_ids}  ${list_classes}
   Should Be True  ${table_styles_found}
   Should Be True  ${list_styles_found}
 
 E0-T2-5: Id and class selector are used
   [Documentation]  Ids and class selectors are used to define styles.
+  ...  The test deduces whether at least one id and one class definition
+  ...  corresponding to a html element is found and has content in the CSS
+  ...  file.
   [Tags]  ex0  e0t2  full
 
   ${html_contents}  Get File  ${HTML_FILE}
-  ${html_ids}  Get Regexp Matches  ${html_contents}  .*?id\s*?=\\s*?["|'](.*?)["|']  1
-  ${html_classes}  Get Regexp Matches  ${html_contents}  .*?class\s*?=\\s*?["|'](.*?)["|']  1
+  ${html_ids}  Get Regexp Matches  ${html_contents}  .*?id\\s*?=\\s*?["|'](.*?)["|']  1
+  ${html_classes}  Get Regexp Matches  ${html_contents}  .*?class\\s*?=\\s*?["|'](.*?)["|']  1
   ${css_contents}  Get File  ${CSS_FILE}
   ${css_ids}  Get Regexp Matches  ${css_contents}  .*?#(.*?)\\s*?\\{  1
-  ${css_classes}  Get Regexp Matches  ${css_contents}  .*?\.(.*?)[^a-z].*?\\s*?\\{  1
+  ${css_classes}  Get Regexp Matches  ${css_contents}  [^a-z]\\.(.*?)[\\s|\\{]  1
   ${css_ids}  Sanitize Empty Spaces From Strings  ${css_ids}
   ${css_classes}  Sanitize Empty Spaces From Strings  ${css_classes}
   Should Contain Any  ${html_ids}  @{css_ids}
   Should Contain Any  ${html_classes}  @{css_classes}
 
 E0-T2-6: Element position and sizing options are used
-  [Documentation]  Ids and class selectors are used to define styles.
+  [Documentation]  Some positioning and sizing styles have been defined with CSS.
+  ...  The following declarations are searched to determine positional styling:
+  ...  margin, padding, position, top, right, left, bottom, align.
+  ...  The following declarations are searched to determine size styling:
+  ...  height, width, font-size.
   [Tags]  ex0  e0t2  full
-  
+
   @{position_support_words}  Create List  margin  padding  position  align  top  right  left  bottom
   @{size_support_words}  Create List  height  width  size
   ${css_contents}  Get File  ${CSS_FILE}
@@ -336,22 +261,112 @@ Verify List Element Hierarchy
   @{elements}  Split String  ${list_elements}  ${SPACE}
   &{relations}  Parent Child Relations From List  ${elements}
   FOR  ${list}  IN  @{elements}
-    ${verification_result}  Run Keyword And Return Status
-    ...  Verify List Item Found  ${relations}
+    ${verification_result}  Verify List Item Found  ${relations}
   END
   [Return]  ${verification_result}
 
 Verify List Item Found
   [Arguments]  ${parent_child_dict}
+  ${result}  Set Variable  False
   FOR  ${relations}  IN  &{parent_child_dict}
     IF  ('${relations}[0]' == '<ul>' or '${relations}[0]' == '<ol>' or '${relations}[0]' == '<menu>')
       FOR  ${item}  IN  @{relations}[1]
-        Should Contain Any  ${item}  <li>  <script>  <template>
+        ${result}  Run Keyword And Return Status
+        ...  Should Contain Any  ${item}  <li>  <script>  <template>
+        IF  '${result}' == 'True'
+          BREAK
+        END
       END
     END
   END
+  [Return]  ${result}
 
 Check If URL Contains Path
   [Arguments]  ${src}
   ${img_contains_path}  Get Regexp Matches  ${src}  \\.\\/|[a-z0-9]\\/[a-z0-9]
   [Return]  ${img_contains_path}
+
+Store Id References
+  [Arguments]  ${elements}
+  ${ids}  Create List
+  FOR  ${elem}  IN  @{elements}
+    @{elem_items}  Create List  ${elem.get('id')}
+    FOR  ${item}  IN  @{elem_items}
+      IF  '${item}' != 'None'
+        Append To List  ${ids}  ${item}
+      END
+    END
+  END
+  [Return]  ${ids}
+
+Store Class References
+  [Arguments]  ${elements}
+  ${classes}  Create List
+  FOR  ${elem}  IN  @{elements}
+    @{elem_items}  Create List  ${elem.get('class')}
+    FOR  ${item}  IN  @{elem_items}
+      IF  ${item} != None
+        Append To List  ${classes}  @{item}
+      END
+    END
+  END
+  [Return]  ${classes}
+
+Verify Defined Table Styles
+  [Arguments]  ${css_file_contents}  ${table_ids}  ${table_classes}
+  ${table_styles_found}  Get Regexp Matches  ${css_file_contents}  table.*?\\{([^}]+)\\}|td.*?\\{([^}]+)\\}|th.*?\\{([^}]+)\\}
+  IF  not ${table_styles_found}
+    ${table_styles_found}  Run Keyword And Return Status
+    ...  Should Contain Any  ${css_file_contents}  @{table_ids}
+    IF  not ${table_styles_found}
+      ${table_styles_found}  Run Keyword And Return Status
+      ...  Should Contain Any  ${css_file_contents}  @{table_classes}
+    END
+  END
+  [Return]  ${table_styles_found}
+
+Verify Defined List Styles
+  [Arguments]  ${css_file_contents}  ${list_ids}  ${list_classes}
+  ${list_styles_found}  Get Regexp Matches  ${css_file_contents}  ul\\s*?\\{([^}]+)\\}|ol\\s*?\\{([^}]+)\\}|menu\\s*?\\{([^}]+)\\}|li\\s*?\\{([^}]+)\\}
+  IF  not ${list_styles_found}
+    ${list_styles_found}  Run Keyword And Return Status
+    ...  Should Contain Any  ${css_file_contents}  @{list_ids}
+    IF  not ${list_styles_found}
+      ${list_styles_found}  Run Keyword And Return Status
+      ...  Should Contain Any  ${css_file_contents}  @{list_classes}
+    END
+  END
+  [Return]  ${list_styles_found}
+
+Verify Table Elements
+  [Arguments]  ${table_elements}
+  ${table_elem_regex}  Set Variable  table|caption|colgroup|thead|tbody|tr|th|td|tfoot
+  ${proper_table_amount}  Set Variable  ${0}
+  FOR  ${table}  IN  @{table_elements}
+    @{elements}  Split String  ${table}  ${SPACE}
+    FOR  ${element}  IN  @{elements}
+      ${is_table_element}  Run Keyword And Return Status
+      ...  Should Match Regexp  ${element}  ${table_elem_regex}
+      IF  '${is_table_element}' != 'PASS'
+        Remove Values From List  ${elements}  ${element}
+      END
+    END
+    &{relations}  Parent Child Relations From List  ${elements}
+    ${verification_result}  Run Keyword And Return Status
+    ...  Verify Table Element Hierarchy  ${relations}
+    IF  ${verification_result}
+      ${proper_table_amount}  Evaluate  ${proper_table_amount} + 1
+    END
+  END
+  [Return]  ${proper_table_amount}
+
+Verify List Elements
+  [Arguments]  ${list_elements}
+  ${number_of_verified_proper_list}  Set Variable  ${0}
+  FOR  ${list}  IN  @{list_elements}
+    ${verification_result}  Verify List Element Hierarchy  ${list}
+    IF  ${verification_result}
+      ${number_of_verified_proper_list}  Evaluate  ${number_of_verified_proper_list} + 1
+    END
+  END
+  [Return]  ${number_of_verified_proper_list}
