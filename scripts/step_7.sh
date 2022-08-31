@@ -2,6 +2,20 @@
 echo Collecting summary scores
 echo -------------------------
 summaryRowPos=${FIRST_ID_POSITION}
+if [ "$ASSESSMENT_EX" == "ex0" ]
+then
+    current_ex_max_score=$EX0_MAX_SCORE
+elif  [ "$ASSESSMENT_EX" == "ex1" ]
+then
+    current_ex_max_score=$EX1_MAX_SCORE
+elif  [ "$ASSESSMENT_EX" == "ex2" ]
+then
+    current_ex_max_score=$EX2_MAX_SCORE
+elif  [ "$ASSESSMENT_EX" == "ex3" ]
+then
+    current_ex_max_score=$EX3_MAX_SCORE
+fi
+
 for sut in ${SUBJECTS_DIR}/* ; do
     # Calculate total scores
     robot \
@@ -10,7 +24,7 @@ for sut in ${SUBJECTS_DIR}/* ; do
         -i total \
         -v STUDENT_ID:"$(basename "$sut")" \
         -v STUDENT_REPORT_ROW:${summaryRowPos} \
-        -v MAX_SCORE:${EX0_MAX_SCORE} \
+        -v MAX_SCORE:$current_ex_max_score \
         -v EX_NUM:"$ASSESSMENT_EX" \
         $TASKS_DIR/update_score.robot
     ((summaryRowPos=summaryRowPos+1))

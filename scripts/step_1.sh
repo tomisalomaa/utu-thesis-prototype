@@ -175,6 +175,6 @@ then
     exit 0
 else
     echo Improper argument given: "$ASSESSMENT_EX".
-    echo Specify either \"ex0\", \"ex1\", \"ex2\", \"ex3\" or \"ex4\" to determine the scope of assessment.
+    echo Specify either \"ex0\", \"ex1\", \"ex2\" or \"ex3\" to determine the scope of assessment.
     exit 1
 fi

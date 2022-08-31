@@ -8,7 +8,7 @@ then
     PING=true
     req_num=0
     echo "Will perform up to 20 requests while waiting for npm start."
-    while [[ $PING == true || req_num < 61 ]]
+    while [[ $PING == true && $req_num < 61 ]]
     do
         ((req_num=req_num+1))
         nc -vz ${HOST}
