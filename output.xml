@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<robot generator="Robot 4.1 (Python 3.8.10 on win32)" generated="20220829 22:06:51.027" rpa="false" schemaversion="2">
+<suite id="s1" name="Ex1-Static-Tests" source="d:\koodi\diplomi\utulab\salomaa-thesis\tests\ex1-static-tests.robot">
+<kw name="Initiate Static Testing" type="SETUP">
+<kw name="Log" library="BuiltIn">
+<arg>${TEST_SUBJECT_DIR}</arg>
+<doc>Logs the given message with the given level.</doc>
+<msg timestamp="20220829 22:06:51.222" level="FAIL">Variable '${TEST_SUBJECT_DIR}' not found.</msg>
+<status status="FAIL" starttime="20220829 22:06:51.221" endtime="20220829 22:06:51.231"/>
+</kw>
+<status status="FAIL" starttime="20220829 22:06:51.220" endtime="20220829 22:06:51.231"/>
+</kw>
+<test id="s1-t1" name="E1-T1-1: Course App Consists Of Three Main Components">
+<doc>Source code has the three main components: Header, Contents and Total.</doc>
+<tag>e0t1</tag>
+<tag>ex1</tag>
+<tag>full</tag>
+<status status="FAIL" starttime="20220829 22:06:51.232" endtime="20220829 22:06:51.233">Parent suite setup failed:
+Variable '${TEST_SUBJECT_DIR}' not found.</status>
+</test>
+<status status="FAIL" starttime="20220829 22:06:51.032" endtime="20220829 22:06:51.237">Suite setup failed:
+Variable '${TEST_SUBJECT_DIR}' not found.</status>
+</suite>
+<statistics>
+<total>
+<stat pass="0" fail="1" skip="0">All Tests</stat>
+</total>
+<tag>
+<stat pass="0" fail="1" skip="0">e0t1</stat>
+<stat pass="0" fail="1" skip="0">ex1</stat>
+<stat pass="0" fail="1" skip="0">full</stat>
+</tag>
+<suite>
+<stat pass="0" fail="1" skip="0" id="s1" name="Ex1-Static-Tests">Ex1-Static-Tests</stat>
+</suite>
+</statistics>
+<errors>
+<msg timestamp="20220829 22:06:51.081" level="ERROR">Error in file 'd:\koodi\diplomi\utulab\salomaa-thesis\tests\ex1-static-tests.robot' on line 5: Importing library 'Browser' failed: ModuleNotFoundError: No module named 'Browser'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src\robotframework_debug_adapter
+  D:\koodi\diplomi\utulab\salomaa-thesis
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src\robotframework_ls\vendored
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\python38.zip
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\DLLs
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\win32
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\win32\lib
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\Pythonwin</msg>
+<msg timestamp="20220829 22:06:51.088" level="ERROR">Error in file 'd:\koodi\diplomi\utulab\salomaa-thesis\tests\ex1-static-tests.robot' on line 6: Importing library 'RequestsLibrary' failed: ModuleNotFoundError: No module named 'RequestsLibrary'
+Traceback (most recent call last):
+  None
+PYTHONPATH:
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src\robotframework_debug_adapter
+  D:\koodi\diplomi\utulab\salomaa-thesis
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src
+  c:\Users\TSa\.vscode\extensions\robocorp.robotframework-lsp-1.0.0\src\robotframework_ls\vendored
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\python38.zip
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\DLLs
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\win32
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\win32\lib
+  C:\Users\TSa\AppData\Local\robocorp\holotree\b1f3c244e_da28c852\lib\site-packages\Pythonwin</msg>
+</errors>
+</robot>
