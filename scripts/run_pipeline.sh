@@ -3,15 +3,19 @@ echo =========================
 echo PREPARING TO RUN PIPELINE
 echo =========================
 # Set global directory variables
+export ASSESSMENT_EX="$1"
 export SCRIPT_DIR="$(realpath $(dirname "$0"))"
 export DIR="$(realpath "$PWD")"
+# for docker implementation use /opt/; for local use for example /home/
+export REACT_BASE_DIR="/opt/"
+export REACT_PROJ_DIR="/opt/system-under-test/"
 echo Global variables set
 
 # Run step 1: verify directory structure and submitted contents
 echo ================
 echo STARTING STEP 1
 echo ================
-$SCRIPT_DIR/step_1.sh
+./scripts/step_1.sh
 step_status=$?
 
 # if step 1 ok, run step 2: prepare content
@@ -32,12 +36,14 @@ then
     export FIRST_ID_POSITION=4
     # export exercise scoring params -- max score from programming tasks
     export EX0_MAX_SCORE=2
+    export EX1_MAX_SCORE=10
 
     echo Global variables updated
     echo ================
     echo STARTING STEP 2
     echo ================
-    $SCRIPT_DIR/step_2.sh
+    ./scripts/npm_start.sh
+    ./scripts/step_2.sh
     step_status=$?
 else
     echo Step 1 did not complete successfully, ending pipeline execution!
@@ -50,7 +56,7 @@ then
     echo ================
     echo STARTING STEP 3
     echo ================
-    $SCRIPT_DIR/step_3.sh
+    ./scripts/step_3.sh
     step_status=$?
 else
     echo Step 2 did not complete successfully, ending pipeline execution!
@@ -63,7 +69,7 @@ then
     echo ================
     echo STARTING STEP 4
     echo ================
-    $SCRIPT_DIR/step_4.sh
+    ./scripts/step_4.sh
     step_status=$?
 else
     echo Step 3 did not complete successfully, ending pipeline execution!
@@ -78,7 +84,7 @@ then
     echo ================
     echo STARTING STEP 5
     echo ================
-    $SCRIPT_DIR/step_5.sh
+    ./scripts/step_5.sh
     step_status=$?
 else
     echo Step 4 did not complete successfully, ending pipeline execution!
@@ -91,7 +97,7 @@ then
     echo ================
     echo STARTING STEP 6
     echo ================
-    $SCRIPT_DIR/step_6.sh
+    ./scripts/step_6.sh
     step_status=$?
 else
     echo Step 5 did not complete successfully, ending pipeline execution!
@@ -104,7 +110,7 @@ then
     echo ================
     echo STARTING STEP 7
     echo ================
-    $SCRIPT_DIR/step_7.sh
+    ./scripts/step_7.sh
     step_status=$?
 else
     echo Step 6 did not complete successfully, ending pipeline execution!
@@ -117,7 +123,7 @@ then
     echo ================
     echo STARTING STEP 8
     echo ================
-    $SCRIPT_DIR/step_8.sh
+    ./scripts/step_8.sh
     step_status=$?
 else
     echo Step 7 did not complete successfully, ending pipeline execution!

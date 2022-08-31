@@ -1,2 +1,3 @@
 #!/bin/bash
-echo Hello World from step_8!
+echo Preparing "$ASSESSMENT_EX" artifacts to collect
+echo ---------------------------------

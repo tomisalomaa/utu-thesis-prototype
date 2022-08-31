@@ -17,8 +17,11 @@ RUN apt-get -y update && apt-get -y upgrade \
     && rm -rf /var/lib/apt/lists \
     && curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
     && apt-get install -y nodejs \
+        && npm install npm@latest -g \
+        && npm install -g create-react-app \
     && pip3 install -r /opt/rf/requirements.txt \
     && rfbrowser init \
+    && apt-get install -y netcat \
     && chmod 755 /opt/rf/scripts/*.sh \
     && mkdir -p /opt/rf/reports/ \
     && chmod 777 /opt/rf/reports/ \

@@ -2,9 +2,9 @@
 echo Extracting zipped submissions
 echo -----------------------------
 for package in $SUBMISSION_DIR/* ; do
-  subject=$(echo "$(basename "$package")" | cut -f 1 -d '.')
-  echo Processing ${subject}...
-  unzip -qo "${package}" -d $SUBJECTS_DIR/"${subject}"
+    subject=$(echo "$(basename "$package")" | cut -f 1 -d '.')
+    echo Processing $subject...
+    unzip -qo "$package" -d $SUBJECTS_DIR/"$subject"
 done
 number_of_submissions=$(find ./data/submissions/*.zip -maxdepth 0 -type f | wc -l)
 number_of_extracted_submissions=$(find ./data/test-subjects/* -maxdepth 0 -type d | wc -l)

@@ -10,7 +10,7 @@ Suite Setup     Open Report File
 Suite Teardown  Close Report File
 
 *** Variables ***
-${REL_REPORTS_PATH}  ${CURDIR}${/}..${/}${REPORTS_DIR}
+${REL_REPORTS_PATH}  ${CURDIR}${/}..${/}${REPORTS_DIR}${/}${EX_NUM}${/}
 
 *** Tasks ***
 Add Student To List
