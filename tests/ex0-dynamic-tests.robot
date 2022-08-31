@@ -20,7 +20,7 @@ E0-T1-5: Page contains a valid image element
   ...  2) If the test object is missing src property or its contents,
   ...     it will be caught all the same as a broken image even when
   ...     html parsers are used.
-  [Tags]  ex0  e0t1  full
+  [Tags]  ex0  e0t1
 
   &{verified_img_results}  Create Dictionary  pass=${0}  fail=${0}
   New Page  file://${HTML_FILE}
@@ -47,7 +47,7 @@ E0-T1-5: Page contains a valid image element
 E0-T1-6: Page contains a form with input elements
   [Documentation]  Page has at least one form element containing input elements.
   ...  Action attribute need not be defined.
-  [Tags]  ex0  e0t1  full
+  [Tags]  ex0  e0t1
 
   &{verified_form_inputs}  Create Dictionary  pass=${0}  fail=${0}
   @{allowed_input_types}  Create List
@@ -80,7 +80,7 @@ E0-T2-4: Specificity is used in styling
   ...  For lists only <li> elements will be considered.
   ...  Tests will flunk solutions that have used specificity to more than
   ...  exactly one considered child element in any given parent.
-  [Tags]  ex0  e0t2  full
+  [Tags]  ex0  e0t2
 
   # Create dictionaries to store data for final verification.
   &{table_dict}  Create Dictionary

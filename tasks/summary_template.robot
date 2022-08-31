@@ -81,7 +81,28 @@ Create Columns EX1
   [Arguments]  ${filename}
   Write Excel Cell  row_num=1  col_num=1  value=Exercise 1
   Write Excel Cell  row_num=3  col_num=2  value=TOTAL
-  Write Excel Cell  row_num=2  col_num=3  value=Hello World
+  Write Excel Cell  row_num=1  col_num=3  value=COURSES APP
+  Write Excel Cell  row_num=2  col_num=3  value=Three main components
+  Write Excel Cell  row_num=3  col_num=3  value=E1-T1-1
+  Write Excel Cell  row_num=2  col_num=4  value=Part components within Contents
+  Write Excel Cell  row_num=3  col_num=4  value=E1-T1-2
+  Write Excel Cell  row_num=2  col_num=5  value=Object data
+  Write Excel Cell  row_num=3  col_num=5  value=E1-T1-3
+  Write Excel Cell  row_num=2  col_num=6  value=Props are passed directly
+  Write Excel Cell  row_num=3  col_num=6  value=E1-T1-4
+  Write Excel Cell  row_num=2  col_num=7  value=App opens in a browser
+  Write Excel Cell  row_num=3  col_num=7  value=E1-T1-5
+  Write Excel Cell  row_num=1  col_num=8  value=FEEDBACK APP
+  Write Excel Cell  row_num=2  col_num=8  value=Three feedback buttons
+  Write Excel Cell  row_num=3  col_num=8  value=E1-T2-1
+  Write Excel Cell  row_num=2  col_num=9  value=Statistics are hidden if no feedback
+  Write Excel Cell  row_num=3  col_num=9  value=E1-T2-2
+  Write Excel Cell  row_num=2  col_num=10  value=App contains several components
+  Write Excel Cell  row_num=3  col_num=10  value=E1-T2-3
+  Write Excel Cell  row_num=2  col_num=11  value=App displays and updates statistics
+  Write Excel Cell  row_num=3  col_num=11  value=E1-T2-4
+  Write Excel Cell  row_num=2  col_num=12  value=Statistics are presented in html table
+  Write Excel Cell  row_num=3  col_num=12  value=E1-T2-5
   Save Excel Document  filename=${filename}
 
 Create Columns EX2
