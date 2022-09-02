@@ -15,7 +15,7 @@ then
         -i new \
         -v STUDENT_ID:"$(basename "$sut")" \
         -v STUDENT_REPORT_ROW:${summaryRowPos} \
-        -v  EX_NUM:"$ASSESSMENT_EX" \
+        -v EX_NUM:"$ASSESSMENT_EX" \
         $TASKS_DIR/update_score.robot
         ((summaryRowPos=summaryRowPos+1))
     done
