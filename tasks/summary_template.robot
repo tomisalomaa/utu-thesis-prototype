@@ -28,10 +28,6 @@ Prepare Columns For Exercise 3
   [Tags]  ex3
   Create Columns EX3  ${REL_REPORTS_PATH}${/}${SUMMARY_FILE_NAME}
 
-Prepare Columns For Exercise 4
-  [Tags]  ex4
-  Create Columns EX4  ${REL_REPORTS_PATH}${/}${SUMMARY_FILE_NAME}
-
 Close Report
   [Tags]  ex0  ex1  ex2  ex3
   Close All Excel Documents
@@ -109,17 +105,27 @@ Create Columns EX2
   [Arguments]  ${filename}
   Write Excel Cell  row_num=1  col_num=1  value=Exercise 2
   Write Excel Cell  row_num=3  col_num=2  value=TOTAL
-  Write Excel Cell  row_num=2  col_num=3  value=Hello World
+  Write Excel Cell  row_num=1  col_num=3  value=COURSES APP
+  Write Excel Cell  row_num=2  col_num=3  value=Content structuring
+  Write Excel Cell  row_num=3  col_num=3  value=E2-T1-1
+  Write Excel Cell  row_num=2  col_num=4  value=Exercises total number is displayed
+  Write Excel Cell  row_num=3  col_num=4  value=E2-T1-2
+  Write Excel Cell  row_num=2  col_num=5  value=Module separation
+  Write Excel Cell  row_num=3  col_num=5  value=E2-T1-3
+  Write Excel Cell  row_num=1  col_num=6  value=PHONEBOOK APP
+  Write Excel Cell  row_num=2  col_num=6  value=Prevent adding already existing name
+  Write Excel Cell  row_num=3  col_num=6  value=E2-T2-1
+  Write Excel Cell  row_num=2  col_num=7  value=App is divided into several components
+  Write Excel Cell  row_num=3  col_num=7  value=E2-T2-2
+  Write Excel Cell  row_num=2  col_num=8  value=Contact can be deleted
+  Write Excel Cell  row_num=3  col_num=8  value=E2-T2-3
+  Write Excel Cell  row_num=2  col_num=9  value=Initial state is stored in a file
+  Write Excel Cell  row_num=3  col_num=9  value=E2-T2-4
+  Write Excel Cell  row_num=2  col_num=10  value=Initial state is fetched from server
+  Write Excel Cell  row_num=3  col_num=10  value=E2-T2-5
   Save Excel Document  filename=${filename}
 
 Create Columns EX3
-  [Arguments]  ${filename}
-  Write Excel Cell  row_num=1  col_num=1  value=Exercise 3
-  Write Excel Cell  row_num=3  col_num=2  value=TOTAL
-  Write Excel Cell  row_num=2  col_num=3  value=Hello World
-  Save Excel Document  filename=${filename}
-
-Create Columns EX4
   [Arguments]  ${filename}
   Write Excel Cell  row_num=1  col_num=1  value=Exercise 3
   Write Excel Cell  row_num=3  col_num=2  value=TOTAL
