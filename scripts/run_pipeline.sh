@@ -37,6 +37,7 @@ then
     # export exercise scoring params -- max score from programming tasks
     export EX0_MAX_SCORE=2
     export EX1_MAX_SCORE=10
+    export EX2_MAX_SCORE=10
 
     echo Global variables updated
     echo ================

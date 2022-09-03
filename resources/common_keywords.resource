@@ -51,17 +51,21 @@ Insert Submission Id To Results Summary Sheet
 
 Find Files With Content Containing Keywords
   [Arguments]  ${parent_search_dir}  ${required_keywords}  ${file_extension}
+  ${keywords_amount}  Get Length  ${required_keywords}
   @{result_files}  Create List
   ${files}  Search File With Extension  ${parent_search_dir}  ${file_extension}
   FOR  ${file}  IN  @{files}
-    ${keyword_present}  Set Variable  'EMPTY'
+    ${total_found}  Set Variable  ${0}
     ${file_contents}  Get File  ${file}
     FOR  ${word}  IN  @{required_keywords}
-      ${keywords_found}  Get Regexp Matches  ${file_contents}  (?i:.*?${word}*.*?)
-      ${amount_found}  Get Length  ${keywords_found}
+      ${matches_found}  Get Regexp Matches  ${file_contents}  (?i:.*?${word}*.*?)
+      ${amount_found}  Get Length  ${matches_found}
       IF  ${amount_found} == ${0}
         BREAK
       ELSE
+        ${total_found}  Evaluate  ${total_found}+1
+      END
+      IF  ${total_found} == ${keywords_amount}
         Append To List  ${result_files}  ${file}
       END
     END
