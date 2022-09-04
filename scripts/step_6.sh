@@ -14,6 +14,12 @@ for sut in $SUBJECTS_DIR/* ; do
         ./scripts/step_6_ex1_support.sh
         export et=e1t2
         ./scripts/step_6_ex1_support.sh
+    elif [ "$ASSESSMENT_EX" == "ex2" ]
+    then
+        export et=e2t1
+        ./scripts/step_6_ex2_support.sh
+        export et=e2t2
+        ./scripts/step_6_ex2_support.sh
     fi
     ((summaryRowPos=summaryRowPos+1))
 done

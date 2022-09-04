@@ -1,3 +1,4 @@
+#!/bin/bash
 # Run tests
 robot \
     --name  "$(basename "$sut") dynamic tests" \
