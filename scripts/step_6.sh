@@ -2,6 +2,9 @@
 echo Executing dynamic tests
 echo -----------------------
 summaryRowPos=$FIRST_ID_POSITION
+export REACT_PROJ_DIR
+export REACT_BASE_DIR
+export RESOURCES_DIR
 for sut in $SUBJECTS_DIR/* ; do
     export sut
     export summaryRowPos
