@@ -1,3 +1,4 @@
+#!/bin/bash
 # Move index file for npm dev server
 robot \
     -i "$et" \
