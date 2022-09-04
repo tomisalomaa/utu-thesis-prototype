@@ -2,11 +2,11 @@
 # Move index file for npm dev server
 robot \
     -i "$et" \
-    -d $TESTS_DIR/../results/"$ASSESSMENT_EX"/step_5/"$(basename "$sut")"/ \
+    -d $TESTS_DIR/../results/"$ASSESSMENT_EX"/step_6/ex1_support_step/"$(basename "$sut")"/ \
     -v STUDENT_ID:"$(basename "$sut")" \
     -v EX_NUM:"$ASSESSMENT_EX" \
-    -v DYNA_FOLDER:"$REACT_PROJ_DIR" \
-    -v SUT_FOLDER:"$sut" \
+    -v DYNA_DIR:"$REACT_PROJ_DIR" \
+    -v SUT_DIR:"$sut" \
     $TASKS_DIR/support_tasks.robot
 
 # Run tests

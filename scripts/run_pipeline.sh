@@ -9,7 +9,7 @@ export DIR="$(realpath "$PWD")"
 # for docker implementation use /opt/; for local use for example /home/
 export REACT_BASE_DIR="/opt/"
 export REACT_PROJ_DIR="/opt/system-under-test/"
-echo Global variables set
+echo "Global variables set."
 
 # Run step 1: verify directory structure and submitted contents
 echo ================
@@ -43,7 +43,10 @@ then
     echo ================
     echo STARTING STEP 2
     echo ================
-    ./scripts/npm_start.sh
+    if [ "$ASSESSMENT_EX" == "ex1" ]
+    then
+        ./scripts/npm_start.sh $REACT_PROJ_DIR $REACT_BASE_DIR
+    fi
     ./scripts/step_2.sh
     step_status=$?
 else

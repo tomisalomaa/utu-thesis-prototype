@@ -19,6 +19,8 @@ RUN apt-get -y update && apt-get -y upgrade \
     && apt-get install -y nodejs \
         && npm install npm@latest -g \
         && npm install -g create-react-app \
+        && npm install -g json-server \
+    && apt-get install -y procps \
     && pip3 install -r /opt/rf/requirements.txt \
     && rfbrowser init \
     && apt-get install -y netcat \

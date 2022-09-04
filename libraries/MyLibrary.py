@@ -2,6 +2,8 @@
 import os
 import re
 import fnmatch
+import shutil
+import errno
 from bs4 import BeautifulSoup, Doctype
 
 class MyLibrary:
@@ -126,3 +128,14 @@ class MyLibrary:
             else:
                 met_parents.pop(0)
         return parent_child_dict
+
+    def copy_directory_contents(self, src, dst):
+        try:
+            if os.path.exists(dst):
+                shutil.rmtree(dst)
+            shutil.copytree(src, dst)
+        except OSError as exc:
+            if exc.errno in (errno.ENOTDIR, errno.EINVAL):
+                shutil.copy(src, dst)
+            else:
+                raise

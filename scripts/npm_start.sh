@@ -1,16 +1,16 @@
 #!/bin/bash
-if [ ! -d "$REACT_PROJ_DIR" ]
+if [ ! -d "$1" ]
 then
-    echo "$REACT_PROJ_DIR" directory missing.
+    echo "$1" directory missing.
     echo Creating react app...
-    cd "$REACT_BASE_DIR"
+    cd $2
     create-react-app system-under-test
-    cp "$DIR/resources/.env" "$REACT_PROJ_DIR"
+    cp "$DIR/resources/.env" "$1"
 else
     pkill -f node
-    cp "$DIR/resources/.env" "$REACT_PROJ_DIR"
+    cp "$DIR/resources/.env" "$1"
 fi
 echo Executing npm CI and START
-cd "$REACT_PROJ_DIR"
+cd "$1"
 npm ci
 npm start &

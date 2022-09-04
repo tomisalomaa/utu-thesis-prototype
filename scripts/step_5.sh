@@ -1,7 +1,7 @@
 #!/bin/bash
 echo Preparing dynamic tests
 echo -----------------------
-if [ "$ASSESSMENT_EX" != "ex0" ]
+if [ "$ASSESSMENT_EX" == "ex1" ]
 then
     HOST="localhost 3000"
     WAITTIME=3
@@ -20,7 +20,5 @@ then
             PING=false
         fi
     done
-else
-    echo No preparations needed when assessing "$ASSESSMENT_EX"
 fi
 exit 0
