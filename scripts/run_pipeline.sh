@@ -6,7 +6,7 @@ echo =========================
 export ASSESSMENT_EX="$1"
 export SCRIPT_DIR="$(realpath $(dirname "$0"))"
 export DIR="$(realpath "$PWD")"
-# for docker implementation use /opt/; for local use for example /home/
+# for docker implementation use /opt/; for local use whatever, for example /home/
 export REACT_BASE_DIR="/opt/"
 export REACT_PROJ_DIR="/opt/system-under-test/"
 echo "Global variables set."
@@ -46,6 +46,9 @@ then
     if [ "$ASSESSMENT_EX" == "ex1" ]
     then
         ./scripts/npm_start.sh $REACT_PROJ_DIR $REACT_BASE_DIR
+    elif [ "$ASSESSMENT_EX" == "ex3" ]
+    then
+        ./scripts/mongodb_init.sh
     fi
     ./scripts/step_2.sh
     step_status=$?

@@ -5,7 +5,6 @@ then
     echo ------------------------------
 
     # Check pipeline scripts
-
     if [ -d "$SCRIPT_DIR" ]
     then
         if ! [ -f "$SCRIPT_DIR/step_1.sh" ]
@@ -48,7 +47,6 @@ then
     fi
 
     # Check input data
-
     if [ -d "$DIR/data/submissions" ]
     then
         echo $DIR/data/submissions OK.
@@ -92,7 +90,6 @@ then
     fi
 
     # Check custom libraries, common keyword files and global variables file
-
     if [ -d "$DIR/libraries" ]
     then
         if [ -f "$DIR/libraries/MyLibrary.py" ]
@@ -136,7 +133,6 @@ then
     fi
 
     # Check log and artifact destination folders
-
     if [ -d "$DIR/results/"$ASSESSMENT_EX"" ]
     then
         echo "$DIR/results/"$ASSESSMENT_EX" OK."
@@ -166,6 +162,42 @@ then
         else
             echo "    Could not make directory $DIR/reports/"$ASSESSMENT_EX"/"
             exit 1
+        fi
+    fi
+
+    # If ex3, perform mongodb related directory checks
+    # (consider saving directories in variables)
+    if [ "$ASSESSMENT_EX" == "ex3" ]
+    then
+        if [ -d "/home/data/db" ]
+        then
+            echo "    /home/data/db OK."
+        else
+            echo /home/data/db missing..
+            echo "    Making directory.."
+            mkdir -p /home/data/db
+            if [ -d "/home/data/db" ]
+            then
+                echo "    /home/data/db OK."
+            else
+                echo "    Could not make directory /home/data/db"
+                exit 1
+            fi
+        fi
+        if [ -d "/home/data/log/mongodb" ]
+        then
+            echo "    /home/data/log/mongodb OK."
+        else
+            echo /home/data/log/mongodb missing..
+            echo "    Making directory.."
+            mkdir -p /home/data/log/mongodb
+            if [ -d "/home/data/log/mongodb" ]
+            then
+                echo "    /home/data/log/mongodb OK."
+            else
+                echo "    Could not make directory /home/data/log/mongodb"
+                exit 1
+            fi
         fi
     fi
 

@@ -13,7 +13,10 @@ then
     current_ex_max_score=$EX2_MAX_SCORE
 elif  [ "$ASSESSMENT_EX" == "ex3" ]
 then
-    current_ex_max_score=$EX3_MAX_SCORE
+    echo No static tests created.
+    echo Moving on to next step.
+    exit 0
+    # current_ex_max_score=$EX3_MAX_SCORE
 fi
 
 for sut in ${SUBJECTS_DIR}/* ; do
