@@ -53,7 +53,7 @@ E3-T1-2: Single Id Can Be Requested
   DELETE  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]
   GET  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]  expected_status=404
 
-E3-T1-4: Contact Can Be Deleted Using DELETE
+E3-T1-3: Contact Can Be Deleted Using DELETE
   [Documentation]  A contact entry can be removed with a DELETE request to http://localhost:3001/api/persons/*id*.
   [Tags]  e3t1
   

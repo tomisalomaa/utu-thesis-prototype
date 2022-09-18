@@ -38,6 +38,7 @@ then
     export EX0_MAX_SCORE=2
     export EX1_MAX_SCORE=10
     export EX2_MAX_SCORE=10
+    export EX3_MAX_SCORE=12
 
     echo Global variables updated
     echo ================

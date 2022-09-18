@@ -129,5 +129,17 @@ Create Columns EX3
   [Arguments]  ${filename}
   Write Excel Cell  row_num=1  col_num=1  value=Exercise 3
   Write Excel Cell  row_num=3  col_num=2  value=TOTAL
-  Write Excel Cell  row_num=2  col_num=3  value=Hello World
+  Write Excel Cell  row_num=1  col_num=3  value=PHONEBOOK APP
+  Write Excel Cell  row_num=2  col_num=3  value=Return contacts as array
+  Write Excel Cell  row_num=3  col_num=3  value=E3-T1-1
+  Write Excel Cell  row_num=2  col_num=4  value=Single ID request
+  Write Excel Cell  row_num=3  col_num=4  value=E3-T1-2
+  Write Excel Cell  row_num=2  col_num=5  value=Delete individual contact
+  Write Excel Cell  row_num=3  col_num=5  value=E3-T1-3
+  Write Excel Cell  row_num=2  col_num=6  value=Add contact
+  Write Excel Cell  row_num=3  col_num=6  value=E3-T1-4
+  Write Excel Cell  row_num=2  col_num=7  value=Handle double entry attempts UI
+  Write Excel Cell  row_num=3  col_num=7  value=E3-T1-5-1
+  Write Excel Cell  row_num=2  col_num=7  value=Handle double entry attempts API
+  Write Excel Cell  row_num=3  col_num=7  value=E3-T1-5-2
   Save Excel Document  filename=${filename}
