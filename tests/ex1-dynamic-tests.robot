@@ -28,6 +28,7 @@ E1-T2-1: Feedback App Contains Three Buttons
   ${buttons}  Get Elements  xpath=//button
   FOR  ${button}  IN  @{buttons}
     ${content}  Get Property  ${button}  innerText
+    ${content}  Convert To Lower Case  ${content}
     Should Contain Any  ${content}  @{expected_button_content}
     Remove Values From List  ${expected_button_content}  ${content}
   END
@@ -50,9 +51,9 @@ E1-T2-4: Feedback App Displays Statistics
   ...  2) average (where good is valued 1, neutral is valued 0 and poor is valued -1)
   ...  and 3) the percentage of positive votes.
   [Tags]  e1t2
-  ${button_good}  Get Element  xpath=//button[text() = 'hyvä']|//button[text() = 'good']
-  ${button_neutral}  Get Element  xpath=//button[text() = 'neutraali']|//button[text() = 'neutral']
-  ${button_bad}  Get Element  xpath=//button[text() = 'huono']|//button[text() = 'bad']
+  ${button_good}  Get Element  xpath=//button[text() = 'hyvä']|//button[text() = 'Hyvä']|//button[text() = 'good']|//button[text() = 'Good']
+  ${button_neutral}  Get Element  xpath=//button[text() = 'neutraali']|//button[text() = 'Neutraali']|//button[text() = 'neutral']|//button[text() = 'Neutral']
+  ${button_bad}  Get Element  xpath=//button[text() = 'huono']|//button[text() = 'Huono']|//button[text() = 'bad']|//button[text() = 'Bad']
   Click  ${button_good}
   # Statistics should contain...
   # good: 1 & average: 1
