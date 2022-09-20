@@ -32,7 +32,7 @@ E3-T1-1: Json Array Is Returned From A Localhost Server
   Should Match Regexp  ${response_string}  \\[{.*?}\\]
   Should Match Regexp  ${response_string}  "name":".*?"|"nimi":".*?"
   Should Match Regexp  ${response_string}  "number":".*?"|"numero":".*?"|"num":".*?"
-  Should Match Regexp  ${response_string}  "id":".*?"
+  Should Match Regexp  ${response_string}  "id":".*?"|"id":.*?
 
 E3-T1-2: Single Id Can Be Requested
   [Documentation]  API returns a single directory entry when id is requested, 
@@ -42,7 +42,7 @@ E3-T1-2: Single Id Can Be Requested
 
   ${response}  GET  ${REACT_SERVER_ADDR}/api/persons/
   ${response_string}  Convert To String  ${response.content}
-  ${ids}  Get Regexp Matches  ${response_string}  id":"(.*?)"  1
+  ${ids}  Get Regexp Matches  ${response_string}  id":"(.*?)"|id":([0-9]*?)\\D  1
   ${names}  Get Regexp Matches  ${response_string}  name":"(.*?)"|nimi":"(.*?)"  1
   ${numbers}  Get Regexp Matches  ${response_string}  number":"(.*?)"|numero":"(.*?)"|num":"(.*?)"  1
   ${response}  GET  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]
@@ -51,7 +51,8 @@ E3-T1-2: Single Id Can Be Requested
   Should Match Regexp  ${response_string}  ${names}[0]
   Should Match Regexp  ${response_string}  ${numbers}[0]
   DELETE  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]
-  GET  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]  expected_status=404
+  ${response}  GET  ${REACT_SERVER_ADDR}/api/persons/${ids}[0]  expected_status=Anything
+  Should Contain Any  ${response.status}  404  400
 
 E3-T1-3: Contact Can Be Deleted Using DELETE
   [Documentation]  A contact entry can be removed with a DELETE request to http://localhost:3001/api/persons/*id*.
@@ -158,7 +159,7 @@ End Dynamic Testing
 Delete All Entries
   ${response}  GET  ${REACT_SERVER_ADDR}/api/persons/
   ${response_string}  Convert To String  ${response.content}
-  ${ids}  Get Regexp Matches  ${response_string}  id":"(.*?)"  1
+  ${ids}  Get Regexp Matches  ${response_string}  id":"(.*?)"|id":([0-9]*?)\\D  1
   FOR  ${id}  IN  @{ids}
     DELETE  ${REACT_SERVER_ADDR}/api/persons/${id}
   END
@@ -166,7 +167,7 @@ Delete All Entries
 Get All Ids From Database
   ${response}  GET  ${REACT_SERVER_ADDR}/api/persons/
   ${response_string}  Convert To String  ${response.content}
-  ${entries}  Get Regexp Matches  ${response_string}  id":"(.*?)"  1
+  ${entries}  Get Regexp Matches  ${response_string}  id":"(.*?)"|id":([0-9]*?)\\D  1
   [Return]  ${entries}
 
 Attempt To Add User

@@ -22,7 +22,7 @@ step_status=$?
 if [ $step_status -eq 0 ]
 then
     # export project sub directories to own variables
-    export SUBMISSION_DIR="$(realpath "$DIR/data/submissions")"
+    export SUBMISSION_DIR="$(realpath "$DIR/data/submissions/$ASSESSMENT_EX")"
     export SUBJECTS_DIR="$(realpath "$DIR/data/test-subjects")"
     export LIBRARIES_DIR="$(realpath "$DIR/libraries")"
     export REPORTS_DIR="$(realpath "$DIR/reports")"

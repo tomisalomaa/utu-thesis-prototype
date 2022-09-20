@@ -77,15 +77,9 @@ Rename Module Imports From Index
 
 Fix Mongodb Connection Strings
   [Tags]  e3t1
-  ${mongo_contents}  Get File  ${DYNA_DIR}${/}mongo.js
-  ${mongo_contents}  Replace String Using Regexp  ${mongo_contents}  ["|']mongod.*?["|']  'mongodb://admin:admin@127.0.0.1:27017/ex3tests?authSource=admin'
-  Create File  ${DYNA_DIR}${/}mongo.js  ${mongo_contents}
-  @{files}  List Files In Directory  ${DYNA_DIR}${/}models  *.js  absolute
-  FOR  ${file}  IN  @{files}
-    ${file_contents}  Get File  ${file}
-    ${file_contents}  Replace String Using Regexp  ${file_contents}  ["|']mongod.*?["|']  'mongodb://admin:admin@127.0.0.1:27017/ex3tests?authSource=admin'
-     Create File  ${file}  ${file_contents}
-  END
+  ${new_mongo_url}  Set Variable  'mongodb://admin:admin@127.0.0.1:27017/ex3tests?authSource=admin'
+  Search And Replace Mongo Connection Strings From Folder  ${DYNA_DIR}${/}  ${new_mongo_url}
+  Search And Replace Mongo Connection Strings From Folder  ${DYNA_DIR}${/}models  ${new_mongo_url}
 
 Fix API Paths
   [Tags]  e3t1
@@ -105,3 +99,13 @@ Fix API Paths
   END
   Log  ${index_contents}
   Create File  ${DYNA_DIR}${/}index.js  ${index_contents}
+
+*** Keywords ***
+Search And Replace Mongo Connection Strings From Folder
+  [Arguments]  ${dir_location}  ${new_mongo_string}
+  @{files}  List Files In Directory  ${dir_location}  *.js  absolute
+  FOR  ${file}  IN  @{files}
+    ${file_contents}  Get File  ${file}
+    ${file_contents}  Replace String Using Regexp  ${file_contents}  ["|']mongod.*?["|']  ${new_mongo_string}
+     Create File  ${file}  ${file_contents}
+  END

@@ -47,17 +47,18 @@ then
     fi
 
     # Check input data
-    if [ -d "$DIR/data/submissions" ]
+    if [ -d "$DIR/data/submissions/$ASSESSMENT_EX" ]
     then
-        echo $DIR/data/submissions OK.
+        echo $DIR/data/submissions/$ASSESSMENT_EX OK.
     else
-        echo $DIR/data/submissions not found.
+        echo $DIR/data/submissions/$ASSESSMENT_EX not found.
         echo No submission content available, ending pipeline execution!
         exit 1
     fi
 
     if [ -d "$DIR/data/test-subjects" ]
     then
+        rm -r $DIR/data/test-subjects/*
         echo $DIR/data/test-subjects OK.
     else
         echo $DIR/data/test-subjects missing..
