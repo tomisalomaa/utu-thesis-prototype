@@ -1,5 +1,5 @@
 FROM python:3-slim-bullseye
-VOLUME ["/opt/rf/reports","/opt/rf/results","/opt/rf/tests","/opt/rf/data", "/home/data/db", "/home/data/log/mongodb"]
+VOLUME ["/opt/rf/reports","/opt/rf/results","/opt/rf/robot_scripts","/opt/rf/data", "/home/data/db", "/home/data/log/mongodb"]
 COPY ./ /opt/rf/
 RUN apt-get -y update && apt-get -y upgrade \
     && apt-get -y install gnupg wget curl unzip \
@@ -33,7 +33,9 @@ RUN apt-get -y update && apt-get -y upgrade \
     && chmod +x /etc/init.d/mongodb \
     && chown -R mongodb:mongodb /home/data/db \
     && apt-get install -y netcat \
-    && chmod 755 /opt/rf/scripts/*.sh \
+    && chmod 755 /opt/rf/pipeline_scripts/orchestrating/*.sh \
+    && chmod 755 /opt/rf/pipeline_scripts/main_processes/*.sh \
+    && chmod 755 /opt/rf/pipeline_scripts/support/*.sh \
     && mkdir -p /opt/rf/reports/ \
     && chmod 777 /opt/rf/reports/ \
     && apt-get autoremove -y \
