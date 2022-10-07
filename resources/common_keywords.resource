@@ -91,6 +91,20 @@ Find Most Recent File Based On Keywords
   ${most_recent_file}  Determine Most Recently Modified  ${files}
   [Return]  ${most_recent_file}
 
+Find Most Recent File Based On Keywords And Name
+  [Arguments]  ${location}  ${keywords}  ${name}  ${file_extension}
+  ${all_files}  Find Files With Content Containing Keywords  ${location}  ${keywords}  ${file_extension}
+  @{files}  Create List
+  FOR  ${file}  IN  @{all_files}
+    ${directory}  ${file_name}  Split String From Right  ${file}  /  1
+    ${file_name}  Convert To Lower Case  ${file_name}
+    IF  '${file_name}' == '${name}.${file_extension}'
+      Append To List  ${files}  ${file}
+    END
+  END
+  ${most_recent_file}  Determine Most Recently Modified  ${files}
+  [Return]  ${most_recent_file}
+
 Verify Table Element Hierarchy
   [Arguments]  ${parent_child_dict}
   FOR  ${relations}  IN  &{parent_child_dict}
