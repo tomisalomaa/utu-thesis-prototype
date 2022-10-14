@@ -149,14 +149,6 @@ then
     echo -e "TOTAL: $((end_time-start_time))" >> run_logs.txt
     echo -e "STATIC TESTS: $((step_four_time-step_three_time))" >> run_logs.txt
     echo -e "DYNAMIC TESTS: $((step_six_time-step_four_time))" >> run_logs.txt # this includes also the preparation in step 5
-    echo -e "STEP 1: $((step_one_time-start_time))" >> run_logs.txt
-    echo -e "STEP 2: $((step_two_time-start_time))" >> run_logs.txt
-    echo -e "STEP 3: $((step_three_time-start_time))" >> run_logs.txt
-    echo -e "STEP 4: $((step_four_time-start_time))" >> run_logs.txt
-    echo -e "STEP 5: $((step_five_time-start_time))" >> run_logs.txt
-    echo -e "STEP 6: $((step_six_time-start_time))" >> run_logs.txt
-    echo -e "STEP 7: $((step_seven_time-start_time))" >> run_logs.txt
-    echo -e "STEP 8: $((step_eight_time-start_time))" >> run_logs.txt
     echo -e "===============================" >> run_logs.txt
     exit 0
 else
