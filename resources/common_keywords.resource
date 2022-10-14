@@ -1,29 +1,22 @@
+# Common keywords contain keywords that are used or have potential to be used
+# by multiple robot files now or in the future development.
+
 *** Settings ***
 Library  ..${/}libraries${/}MyLibrary.py
 Variables  ..${/}variables${/}common_variables.py
 
-# Here are general keywords shared by multiple tests
 *** Keywords ***
+# Opens the summary report file using common variables.
+# Using the keyword does not require inputs but the values for report path and
+# summary file name in common_variables.py need to respect the project structure.
+# File needs to be found for the keyword to PASS.
+# @output: summary file is opened with id 'doc01'
 Open Report File
   Open Excel Document  ${REL_REPORTS_PATH}${/}${SUMMARY_FILE_NAME}  doc01
 
-Close Report File
-  Close All Excel Documents
-
-Clean Subject Folders
-  [Arguments]  ${submissions_dir}
-  Close All Excel Documents
-  ${student_dirs}  List Directories In Directory  ${submissions_dir}
-  FOR  ${dir}  IN  @{student_dirs}
-    Remove Directory  ${submissions_dir}${dir}${/}  ${True}
-  END
-
-Save Task Score To Results Summary Sheet
-  [Arguments]  ${student_row}  ${task_col}  ${score}
-  ${score}  Convert To Number  ${score}
-  Write Excel Cell  row_num=${student_row}  col_num=${task_col}  value=${score}
-  Save Excel Document  filename=${results_dir}DTEK2040_Part_0.xlsx
-
+# Iterates through a list of files and compares their line count.
+# @input:   ${files}        a list of file paths
+# @returns: ${result_file}  file path of the file containing most lines
 Get File With Most Lines
   [Arguments]  ${files}
   ${line_count}  Set Variable  ${0}
@@ -38,17 +31,37 @@ Get File With Most Lines
   END
   [Return]  ${result_file}
 
+# Searches a directory by using a keyword defined in MyLibrary.
+# The search returns all .html file paths from that directory.
+# From the returned list of file paths, the html file with most lines is chosen.
+# @input:   ${submission_dir}     directory path containing the wanted html file
+# @returns: ${html_file}        file path of the html file containing most lines
 Search Local HTML Main Page Location
-  # Heuristic assumes largest line count will be (the "correct") index file
   [Arguments]  ${submission_dir}
   ${html_file_locations}  Search File With Extension  ${submission_dir}  html
   ${html_file}  Get File With Most Lines  ${html_file_locations}
   [Return]  ${html_file}
 
+# Respects the current design of results summary sheet and inserts the given submission id
+# into the first column of the template.
+# @input: ${student_row}    row number of the submission in summary sheet,
+#         ${id}             id given to the submission
+# @output: writes id into the summary sheet cell at column=1, row=given
 Insert Submission Id To Results Summary Sheet
   [Arguments]  ${student_row}  ${id}
   Write Excel Cell  row_num=${student_row}  col_num=1  value=${id}
 
+# Searches in a given directory for files with a given extension that contain given keywords.
+# All the declared keywords must be found from the contents of a file in order to determine that
+# the file be returned. If a even a single word is not found from contents, the file will be discarded.
+# Keywords are treated as patterns. This means, for example, that given an input keyword 'light',
+# a match is found from contents including 'lightning', 'blight', 'lighter', ...
+# Patterns are also treated case insensitively.
+# @input:     ${parent_search_dir}    directory path to search files from
+#             ${required_keywords}    a list of keywords to be pattern matched within file contents
+#             ${file_extension}       extension to determine what files should be considered while searching,
+#                                     example: js html
+# @returns:   ${result_files}         a list of files that have positive matches from each and every input keyword
 Find Files With Content Containing Keywords
   [Arguments]  ${parent_search_dir}  ${required_keywords}  ${file_extension}
   ${keywords_amount}  Get Length  ${required_keywords}
@@ -72,6 +85,12 @@ Find Files With Content Containing Keywords
   END
   [Return]  ${result_files}
 
+# Uses 'Get Modified Time' from OperatingSystem library to compare which of the input files
+# is most recently modified. Keyword is used with 'epoch' option which means the modification
+# time of a file is returned in seconds after the UNIX epoch.
+# Use of this keyword required the robot file to import the OperatingSystem library.
+# @input:     ${list_of_files} a list of file paths to compare
+# @returns:   ${recent_file} file path of the most recently modified file
 Determine Most Recently Modified
   [Arguments]  ${list_of_files}
   ${base_time}  Set Variable  ${0}
@@ -85,12 +104,30 @@ Determine Most Recently Modified
   END
   [Return]  ${recent_file}
 
+# See 'Find Files With Content Containing Keywords' and
+# 'Determine Most Recently Modified' keywords above.
+# Uses the results of afore mentioned keyword as input for the latter.
+# @input:   ${location}             directory path to search files from
+#           ${keywords}             a list of keywords to be pattern matched within file contents
+#           ${file_extension}       extension to determine what files should be considered while searching,
+#                                   example: js html
+# @returns:   ${most_recent_file}   file path of the most recently modified file
 Find Most Recent File Based On Keywords
   [Arguments]  ${location}  ${keywords}  ${file_extension}
   ${files}  Find Files With Content Containing Keywords  ${location}  ${keywords}  ${file_extension}
   ${most_recent_file}  Determine Most Recently Modified  ${files}
   [Return]  ${most_recent_file}
 
+# See 'Find Files With Content Containing Keywords' and
+# 'Determine Most Recently Modified' keywords above.
+# Uses the results of afore mentioned keyword as input for the latter.
+# Further filters the results by only considering files that fit the name requirement.
+# @input:   ${location}             directory path to search files from
+#           ${keywords}             a list of keywords to be pattern matched within file contents
+#           ${name}                 expected file name without an extension
+#           ${file_extension}       extension to determine what files should be considered while searching,
+#                                   example: js html
+# @returns:   ${most_recent_file}   file path of the most recently modified file
 Find Most Recent File Based On Keywords And Name
   [Arguments]  ${location}  ${keywords}  ${name}  ${file_extension}
   ${all_files}  Find Files With Content Containing Keywords  ${location}  ${keywords}  ${file_extension}
@@ -105,6 +142,14 @@ Find Most Recent File Based On Keywords And Name
   ${most_recent_file}  Determine Most Recently Modified  ${files}
   [Return]  ${most_recent_file}
 
+# The keyword takes parent element:child element key:value pairs as input and goes through
+# each key to verify that child elements are as dictated by web standards.
+# If at any point a child element is found to be incorrectly under a certain parent element,
+# the keyword determines FAIL status and acts as a test case would when keyword fails.
+# This keyword can be used together with 'Run Keyword And Return Status' to catch the status
+# as a variable without failing a task / test.
+# @input:   ${parent_child_dict}    a dictionary where keys are parent elements and values the child elements found under that parent
+# @output:  PASS / FAIL status
 Verify Table Element Hierarchy
   [Arguments]  ${parent_child_dict}
   FOR  ${relations}  IN  &{parent_child_dict}
@@ -133,6 +178,11 @@ Verify Table Element Hierarchy
     END
   END
 
+# Uses regular expression to verify that a table element does not contain other than hierarchically
+# correct child elements. The keyword can take a list of found table elements. This keyword does not produce
+# a PASS / FAIL status but rather the number of verifiably correct tables.
+# @input:     ${table_elements}       a list of table elements
+# @output:    ${proper_table_amount}  number of correctly constructed table elements
 Verify Table Elements
   [Arguments]  ${table_elements}
   ${table_elem_regex}  Set Variable  table|caption|colgroup|thead|tbody|tr|th|td|tfoot

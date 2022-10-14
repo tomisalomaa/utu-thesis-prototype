@@ -1,8 +1,9 @@
 *** Settings ***
-Library     OperatingSystem
-Library     ExcelLibrary
-Variables   ${GLOBAL_ROBO_VARIABLES_DIR}${/}common_variables.py
-Resource    ${RESOURCES_DIR}${/}common_keywords.resource
+Library         OperatingSystem
+Library         ExcelLibrary
+Variables       ${GLOBAL_ROBO_VARIABLES_DIR}${/}common_variables.py
+Resource        ${RESOURCES_DIR}${/}common_keywords.resource
+Suite Teardown  Close All Excel Documents
 
 *** Variables ***
 ${REL_REPORTS_PATH}  ${REPORTS_DIR}${/}${EX_NUM}${/}
@@ -27,10 +28,6 @@ Prepare Columns For Exercise 2
 Prepare Columns For Exercise 3
   [Tags]  ex3
   Create Columns EX3  ${REL_REPORTS_PATH}${/}${SUMMARY_FILE_NAME}
-
-Close Report
-  [Tags]  ex0  ex1  ex2  ex3
-  Close All Excel Documents
 
 *** Keywords ***
 Remove Existing Summary File

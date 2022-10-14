@@ -7,7 +7,7 @@ Library         Collections
 Variables       ${GLOBAL_ROBO_VARIABLES_DIR}${/}common_variables.py
 Resource        ${RESOURCES_DIR}${/}common_keywords.resource
 Suite Setup     Open Report File
-Suite Teardown  Close Report File
+Suite Teardown  Close All Excel Documents
 
 *** Variables ***
 ${REL_REPORTS_PATH}  ${REPORTS_DIR}${/}${EX_NUM}${/}
