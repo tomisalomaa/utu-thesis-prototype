@@ -37,7 +37,7 @@ E3-T1-2-1: Single Id Request Successful
   Should Match Regexp  ${response_string}  ${numbers}[0]
 
 E3-T1-3: Contact Can Be Deleted Using DELETE
-  [Documentation]  A contact entry can be removed with a DELETE request to http://localhost:3001/api/persons/*id*.
+  [Documentation]  A contact entry can be removed with a DELETE request to http://localhost:3001/api/persons/:id.
   [Tags]  e3t1
   Take Screenshot
   ${ids}  Get All Ids From Database
@@ -61,34 +61,33 @@ E3-T1-5-1: Entry Adding Error Handling When Name exists UI
   ...  1) name or number is missing from the request;
   ...  2) the name to be added already exists in the directory.
   [Tags]  e3t1
-  # Get initial state of entries
+  ${test_name}  Set Variable  User Interface
+  ${test_num}  Set Variable  User 12345
   ${response}  Get All Ids From Database
   ${entry_amount}  Get Length  ${response}
   Go To  ${REACT_SERVER_ADDR}
   Take Screenshot
-  # Fill in details of a new entry and add
-  Attempt To Add User  User Interface  12345
-  # Check that the amount of entries changes
+  Attempt To Add User  ${test_name}  ${test_num}
   Take Screenshot
   ${response}  Get All Ids From Database
   ${new_entry_amount}  Get Length  ${response}
   Should Not Be Equal  ${new_entry_amount}  ${entry_amount}
   ${entry_amount}  Set Variable  ${new_entry_amount}
-  # Make sure to input same info and try to add the person again
-  Attempt To Add User  User Interface  12345
+  # Try to add the person again
+  Attempt To Add User  ${test_name}  ${test_num}
   # Check that the amount of entries has remained the same
   Take Screenshot
   ${response}  Get All Ids From Database
   ${new_entry_amount}  Get Length  ${response}
   Should Be Equal  ${new_entry_amount}  ${entry_amount}
   # Try adding without name
-  Attempt To Add User  ${EMPTY}  12345
+  Attempt To Add User  ${EMPTY}  ${test_num}
   Take Screenshot
   ${response}  Get All Ids From Database
   ${new_entry_amount}  Get Length  ${response}
   Should Be Equal  ${new_entry_amount}  ${entry_amount}
   # Try adding without number
-  Attempt To Add User  User Interface  ${EMPTY}
+  Attempt To Add User  ${test_name}  ${EMPTY}
   Take Screenshot
   ${response}  Get All Ids From Database
   ${new_entry_amount}  Get Length  ${response}
@@ -105,13 +104,11 @@ E3-T1-5-2: Entry Adding Error Handling When Name Exists API
   ...  1) name or number is missing from the request;
   ...  2) the name to be added already exists in the directory.
   [Tags]  e3t1
-  # Get initial state of entries
   Take Screenshot
   ${response}  Get All Ids From Database
   ${entry_amount}  Get Length  ${response}
   &{test_data_json}  Create Dictionary  name=API Addition  number=12345
   POST  ${REACT_SERVER_ADDR}/api/persons  json=${test_data_json}
-  # Check that the amount of entries changes
   Take Screenshot
   ${response}  Get All Ids From Database
   ${new_entry_amount}  Get Length  ${response}
@@ -119,7 +116,6 @@ E3-T1-5-2: Entry Adding Error Handling When Name Exists API
   ${entry_amount}  Set Variable  ${new_entry_amount}
   # Make sure to input same info and try to add the person again
   POST  ${REACT_SERVER_ADDR}/api/persons  json=${test_data_json}
-  # Check that the amount of entries has remained the same
   ${response}  Get All Ids From Database
   Take Screenshot
   ${new_entry_amount}  Get Length  ${response}
