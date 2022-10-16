@@ -108,9 +108,10 @@ Fix API Paths
   # b) the way api has been implemented probably requires static tests to verify.
   # Should affect total score even if functionality is there?
   File Should Exist  ${DYNA_DIR}${/}index.js
+  ${api_path_regexp}  Set Variable  \\.get\\(['|"](.*?\\/persons?).*?['|"]|\\.post\\(['|"](.*?\\/persons?).*?['|"]|\\.delete\\(['|"](.*?\\/persons?).*?['|"]
   ${index_contents}  Get File  ${DYNA_DIR}${/}index.js
   Log  ${index_contents}
-  ${api_paths}  Get Regexp Matches  ${index_contents}  \\.get\\(['|"](.*?\\/persons?).*?['|"]|\\.post\\(['|"](.*?\\/persons?).*?['|"]|\\.delete\\(['|"](.*?\\/persons?).*?['|"]  1
+  ${api_paths}  Get Regexp Matches  ${index_contents}  ${api_path_regexp}  1
   ${api_paths}  Remove Duplicates  ${api_paths}
   FOR  ${path}  IN  @{api_paths}
     IF  '${path}' != 'None'
@@ -124,6 +125,7 @@ Fix API Paths
 *** Keywords ***
 Search And Replace Mongo Connection Strings
   [Arguments]  ${new_mongo_string}
+  ${replace_mongo_regexp}  Set Variable  ["|']mongod.*?["|']|process\\.env\\.[mM][a-zA-Z]*[_]?[a-zA-Z]*\\S|process\\.env\\.[uU][a-zA-Z]*[_]?[a-zA-Z]*\\S  ${new_mongo_string}
   @{directories_to_search}  List Directories In Directory  ${DYNA_DIR}  *  absolute
   Append To List  ${directories_to_search}  ${DYNA_DIR}
   ${non_directories}  Get Matches  ${directories_to_search}  .*
@@ -132,7 +134,7 @@ Search And Replace Mongo Connection Strings
     @{files}  List Files In Directory  ${directory_to_search}  *.js  absolute
     FOR  ${file}  IN  @{files}
       ${file_contents}  Get File  ${file}
-      ${file_contents}  Replace String Using Regexp  ${file_contents}  ["|']mongod.*?["|']|process\\.env\\.[mM][a-zA-Z]*[_]?[a-zA-Z]*\\S|process\\.env\\.[uU][a-zA-Z]*[_]?[a-zA-Z]*\\S  ${new_mongo_string}
+      ${file_contents}  Replace String Using Regexp  ${file_contents}  ${replace_mongo_regexp}
       Create File  ${file}  ${file_contents}
     END
   END
