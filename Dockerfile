@@ -41,4 +41,8 @@ RUN apt-get -y update && apt-get -y upgrade \
     && apt-get autoremove -y \
     && apt-get clean
 WORKDIR /opt/rf/
-#ENTRYPOINT ["./scripts/run_pipeline.sh"]
+## Remove the comment tag from entrypoint to execute the pipeline as soon as
+## Docker container is ready. Remember to declare the exercise set.
+## (For GitLab CI the command is defined inside gitlab-ci.yml and
+### the entrypoint is not needed)
+# ENTRYPOINT ["./pipeline_scripts/orchestrating/run_pipeline.sh ex0"]

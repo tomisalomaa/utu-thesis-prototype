@@ -1,134 +1,179 @@
-# Robot Framework Base Project
-Empty base project for a new Robot Framework project
+# Automated Assessment System for Web Programming Assignments
+This system is a prototype that aims to support in web programming student assignment assessment. The prototype has been developed using a course arranged by the university of Turku, _DTEK2040: Web And Mobile Programming_, as a case study.
 
-## LIST OF BEST PRACTICES
-1. [Folder structure](#folder-structure)
-2. [General Practices](#general-practices)
-    * [Use variables](#use-variables)
-    * [Use tags](#use-tags)
-    * [Detailed logging](#detailed-logging)
-3. [Browser Practices](#best-practices)
-    * [Web element locator strategies](#web-element-locator-strategies)
-    * [Headless mode](#headless-mode)
-    * [Teardown screenshot](#teardown-screenshot)
-    * [Custom browser capabilities](#custom-browser-capabilities)
-    
-## FOLDER STRUCTURE
-rf-base-project:
-- libraries
-    * **.py** keyword libraries (e.g. 'LoginLibrary.py')
-- resources
-    * **.resource** keyword files (e.g. 'login_keywords.resource')
-- tests
-    * **.robot** test suites (e.g. 'login_tests.robot')
-- variables
-    * **.resource** variable files (e.g. 'login_variables.resource')
+The goal of this system is to take student submissions as initial input and then run them through sets of automated tests to assert whether relevant assignment dictated requirements are fulfilled. Implemented robotic process automation tasks are performed to complete various file manipulation and submission preparament, record keeping and summary formulation processes.
 
-Run tests inside folder **~/rf-base-project/**
-```robotframework
-robot -d results tests/tests.robot
-```
+System has been built using Bash, Robot Framework and Python.
 
-## GENERAL PRACTICES
+## **Contents**
+### 1) **Install**: _How the setup was done during development_
+### 2) **Use**: _How the prototype was used while testing_
+### 3) **Packages** and high level descriptions: _What package versions were used to test_
 
-### Use variables
-```robotframework
-# For local variables use lowercase
-${username}  Tapio
-${address}   Tapiolankatu 12
+---
 
-# For constants use uppercase
-${BROWSER}  chrome
-${ENVIRONMENT}   local
+# 1) Install
 
-# For locators create hierarchy with naming
-${LOC_HOME_NAV_LOGIN}  id:login
-${LOC_HOME_NAV_REGISTER}  id:register
-${LOC_HOME_FOOTER_PRIVACY_POLICY}  id:privacy-policy
-${LOC_HOME_FOOTER_CONTACT}  id:contact
+## Installation foreword
+Prototype has been tested with
+1) Debian 11 (bullseye)
+2) Docker container running on base image python:3-slim-bullseye
 
-# Combine variables during execution:
-# robot -results -v $BROWSER:firefox -v $ENVIRONMENT:aws tests
-```
-### Use tags
-```robotframework
-*** Test Cases ***
-Homepage login test
-  [Tags]  homepage login
-  Log  Homepage login
-  
-Homepage signup test
-  [Tags]  homepage signup
-  Log  Homepage signup
-  
-# Use tags to include(-i) / exclude(-e) only wanted tests:
-# robot -d results -i homepage tests
-# robot -d results -e login tests
-```
+Installation instructions will cover the first one and briefly note the second one.
+Knowledge of basic OS usage is expected.
 
-### Detailed logging
-```robotframework
-# To get the python execution trace (for more detailed debugging) printed on the log,
-# run the test with flag '-L trace':  
-# robot -d results -L trace tests
-```
+---
 
-## BROWSER PRACTICES
+## Install on Debian
+First Python related steps can be skipped if Python3 version >3.9 already installed. The prototype was developed with Python 3.9.2. No guarantees for future versions.
+Version can be checked with:
 
-### Web element locator strategies
-```robotframework
-# Web elements, like buttons, are accessed by their XPATH locator (e.g. "//button[@id='login-button']").
-# 'id' is the best and first locator to use, as it presumably changes the least often:
-# ${LOC_LOGIN_BUTTON}    id:login-button
-# If 'id' attribute is not available, try one of the following attributes:
-# 'name', 'class', 'identifier', 'link'
-# If the attributes are not available, try building XPATH expression:
-# ${LOC_LOGIN_BUTTON}    xpath://element[@attribute='value']
-# For searching elements that contain some text:
-# ${LOC_LOGIN_BUTTON}    xpath://element[contains(text(), 'the element's text')]
-```
+    python3 --version
 
-### Headless mode
-```robotframework
-# Running browser 'headless' means no browser windows are drawn, saving processsing time and making tests run faster
-# In the newest versions of SeleniumLibrary, you can simply set the browser to 'headlesschrome' instead of 'chrome'
-# Also available: 'headlessfirefox'
-Open Browser    http://www.sogeti.com    headlesschrome
-```
+Otherwise the steps cover how to install all the required packages for the automation tests to work as they should. Dockerfile contents can also be used to execute all the installation commands included in the _RUN_ section (mind the mkdirs and permission mods; these can be skipped). In this case also chrome and chromedriver will be installed. 
 
-### Teardown screenshot
-```robotframework
-# When a test fails, it would be nice to have information about the last state it was in.
-# That's why it is convenient to take screenshot at test teardown.
-*** Settings ***
-Test Teardown  Close test
+**1\) Python dependencies:**
 
-*** Keywords ***
-Close test
-   # Take a screenshot
-   Run Keyword if Test Failed    Capture Page Screenshot
-   # Do other teardown stuff
-   Log  Test teardown in progress...
-```
+    sudo apt install wget build-essential libreadline-gplv2-dev libncursesw5-dev \
+    libssl-dev libsqlite3-dev tk-dev libgdbm-dev libc6-dev libbz2-dev libffi-dev zlib1g-dev
 
-### Custom browser capabilities
-```robotframework
-# Example keyword for running chrome with different capabilities
-Headless Chrome - Open Browser
-    [Arguments]    ${url}
-    # Add new variable chrome options
-    ${chrome_options} =     Evaluate    sys.modules['selenium.webdriver'].ChromeOptions()    sys, selenium.webdriver
-    # To run chrome in headless mode, add:
-    Call Method    ${chrome_options}   add_argument    headless
-    # To run chrome without gpu, add:
-    Call Method    ${chrome_options}   add_argument    disable-gpu
-    # Add these to options
-    ${options}=     Call Method     ${chrome_options}    to_capabilities
-    # Open browser with options
-    Open Browser    ${url}    browser=chrome    desired_capabilities=${options}
-    # Maximize
-    Maximize Browser Window
-```
+**2\) Python:**
 
+Download the latest / wanted Python release:
 
-...More to come!
+    wget https://www.python.org/ftp/python/3.9.2/Python-3.9.2.tgz
+
+Extract and navigate to python dir:
+
+    tar xzf Python-3.9.1.tgz && cd Python-3.9.2
+
+Prepare python source code compilation:
+
+    /configure --enable-optimizations
+
+Build:
+
+    make -j 2
+
+Install binaries:
+
+    sudo make alt install
+
+Python is now installed as an alternative install. Command to use is 'python' appended with the installed version, i.e.
+
+    python3.9 --version
+
+**3\) Node, npm, create-rect-app and json-server:**
+(see also: https://github.com/nodesource/distributions/blob/master/README.md)
+
+    curl -fsSL https://deb.nodesource.com/setup_18.x | bash - \
+    && apt-get install -y nodejs \
+    && npm install npm@latest -g \
+    && npm install -g create-react-app \
+    && npm install -g json-server
+
+**4\) netcat:**
+
+Netcat:
+
+    apt-get install -y netcat
+
+**5\) Robot Framework + libraries, Beautiful Soup, parsers:**
+
+Robot Framework (+ browser library, requests library, excel library) and
+Beautiful Soup (+ html5lib & lxml parsers) are installed using the pip commands inside _requirements.txt_ file.
+
+Inside the prototype root dir, execute command:
+
+    pip3 install -r ./requirements.txt
+
+Initialize browser library:
+
+    rfbrowser init
+
+**6\) Mongo database:**
+(see also: https://www.mongodb.com/docs/manual/tutorial/install-mongodb-on-debian/)
+
+Import public key and create list file:
+
+    wget -qO - https://www.mongodb.org/static/pgp/server-6.0.asc | apt-key add - \
+    && echo "deb http://repo.mongodb.org/apt/debian buster/mongodb-org/6.0 main" \
+    | tee /etc/apt/sources.list.d/mongodb-org-6.0.list
+
+Reload package database and install Mongo db packages:
+
+    && apt-get update \
+    && apt-get install -y mongodb-org
+
+Directories for Mongo db data and log files should be created during the installation.
+However, if Mongo does not seem to launch at all, consult instructions from the link mentioned at the start of this step.
+
+---
+
+## Install on Docker
+
+The root directory contains _Dockerfile_ which can be used to build a docker image.
+Consult Docker documentation on how to use Docker. (For example: https://docs.docker.com/get-started/02_our_app/)
+
+---
+
+# 2) Use
+
+## Set up before running the pipeline
+Directories for separate exercises are found in **./data/submissions/** directory. Before executing the pipeline, to-be-assessed submissions should be inside their respective exercise folder packaged in **zip** format.
+
+---
+
+## Executing the pipeline on a local system
+Pipeline is started by executing the _run_pipeline.sh_ script located inside **./pipeline_scripts/orchestrating/** directory.
+
+The exercise set to assess is declared with parameter _ex0_ / _ex1_ / _ex2_ / _ex3_, i.e. when executed from root directory:
+
+    ./pipeline_scripts/orchestrating/run_pipeline.sh ex3
+
+---
+
+## Executing the pipeline on Docker
+The entrypoint inside Dockerfile needs to be used and the wanted exercise option declared. By default the entrypoint has been commented out, in which case the container needs to be accessed manually to run the pipeline as one would do locally.
+
+---
+
+## Executing the pipeline on GitLab CI
+Root directory contains _gitlab-ci.yml_ file which sets up a two stage CI pipeline in GitLab if the prototype is pushed as a repo. The ci-file contains variable _ASSESSMENT_COVERAGE_ which is used to define the exercise set that should be assessed during pipeline execution.
+
+When executed inside the CI, Dockerfile should have the entrypoint line commented out or removed because the ci-file will be responsible for running the script.
+
+Results for the execution are uploaded as artifacts and can be downloaded once run is complete. Make sure to set the CI execution timelimit high enough from GitLab settings, depending on submission batch size to assess.
+
+---
+
+# 3) Packages and high level descriptions
+
+**Prototype has been tested with the following package versions**
+
+| Name  | Version   |
+| ---   | --- |
+| Node.js | 18.7.0 |
+| Npm | 8.18.0 |
+| create-react-app | 5.0.1 |
+| json-server | 0.17.0 |
+| MongoDB | 6.0.1 |
+| netcat | 1.217-3 |
+| lxml | 4.9.1 |
+| html5lib | 1.1 |
+| Beautiful Soup | 4.11.1 |
+| Robot Framework | 5.0.1 |
+| Browser library | 14.1.0 |
+| Requests library | 0.9.3 |
+
+---
+
+**Architecture overview**
+
+![image-1.png](./image-1.png)
+
+---
+
+**Script logical layering**
+
+![image-2.png](./image-2.png)

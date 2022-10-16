@@ -16,7 +16,7 @@ RF_EX_ASSESSMENT:
   stage: bravo
   image: $CI_REGISTRY_IMAGE
   variables:
-    ASSESSMENT_COVERAGE: "ex2"      # ex0, ex1, ex2, ex3
+    ASSESSMENT_COVERAGE: "ex0"      # ex0, ex1, ex2, ex3
   artifacts:
     paths: ["./results", "./reports", "./data/test-subjects"]
   script:
