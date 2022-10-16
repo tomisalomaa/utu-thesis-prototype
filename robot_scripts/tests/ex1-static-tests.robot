@@ -19,8 +19,10 @@ E1-T1-1: Course App Consists Of Three Main Components
 E1-T1-2: Course App Contents Consist Of Part Components
   [Documentation]  Contents should contain three Part components.
   [Tags]  ex1  e1t1  full
-  ${contents_component}  Get Regexp Matches  ${COURSE_JS_FILE_CONTENTS}  const\\s*?[cC]ontents\\s*?=\\s*?\\(\\s*?props\\s*?\\).*?=>[\\s\\S]*?{[\\s\\S]*?\\)[\\s\\S]*?}
-  ${part_components}  Get Regexp Matches  ${contents_component}[0]  <\\s*?[pP]art.*?[\\s\\S]*?\\/[\\s]*?>
+  ${component_regexp}  Set Variable  const\\s*?[cC]ontents\\s*?=\\s*?\\(\\s*?props\\s*?\\).*?=>[\\s\\S]*?{[\\s\\S]*?\\)[\\s\\S]*?}
+  ${part_component_regexp}  Set Variable  <\\s*?[pP]art.*?[\\s\\S]*?\\/[\\s]*?>
+  ${contents_component}  Get Regexp Matches  ${COURSE_JS_FILE_CONTENTS}  ${component_regexp}
+  ${part_components}  Get Regexp Matches  ${contents_component}[0]  ${part_component_regexp}
   Length Should Be  ${part_components}  3
 
 E1-T1-3: Course App Data In Objects
@@ -29,11 +31,15 @@ E1-T1-3: Course App Data In Objects
   ...  'course' should contain 'name' and
   ...  'parts' an array of key-value pairs consisting of 'name' and 'exercises'.
   [Tags]  ex1  e1t1  full
-  ${course_object}  Get Regexp Matches  ${COURSE_JS_FILE_CONTENTS}  (const\\s*?[cC]ourse\\s*?=\\s*?{[\\s\\S]*?}[\\s\\S]*?)retur  1
-  ${name_data}  Get Regexp Matches  ${course_object}[0]  (name\\s*?:[\\s\\S]*?['|"].*?['|"])  1
+  ${course_object_regexp}  Set Variable  (const\\s*?[cC]ourse\\s*?=\\s*?{[\\s\\S]*?}[\\s\\S]*?)retur
+  ${name_data_regexp}  Set Variable  (name\\s*?:[\\s\\S]*?['|"].*?['|"])
+  ${parts_data_regexp}  Set Variable  (parts\\s*?:[\\s\\S]*?\\[[\\s\\S]*?\\])
+  ${parts_data_keyvalues_regexp}  Set Variable  {([\\s\\S]*?.*?\\s*?:.*?,[\\s\\S]*?.*?:.*?[\\s\\S]*?)}
+  ${course_object}  Get Regexp Matches  ${COURSE_JS_FILE_CONTENTS}  ${course_object_regexp}  1
+  ${name_data}  Get Regexp Matches  ${course_object}[0]  ${name_data_regexp}  1
   Length Should Be  ${name_data}  4
-  ${parts_data}  Get Regexp Matches  ${course_object}[0]  (parts\\s*?:[\\s\\S]*?\\[[\\s\\S]*?\\])  1
-  ${parts_data_keyvalues}  Get Regexp Matches  ${parts_data}[0]  {([\\s\\S]*?.*?\\s*?:.*?,[\\s\\S]*?.*?:.*?[\\s\\S]*?)}  1
+  ${parts_data}  Get Regexp Matches  ${course_object}[0]  ${parts_data_regexp}  1
+  ${parts_data_keyvalues}  Get Regexp Matches  ${parts_data}[0]  ${parts_data_keyvalues_regexp}  1
   Length Should Be  ${parts_data_keyvalues}  3
   FOR  ${part}  IN  @{parts_data_keyvalues}
     Should Match Regexp  ${part}  [nN]ame

@@ -89,20 +89,12 @@ E0-T2-4: Specificity is used in styling
   ...  Tests will flunk solutions that have used specificity to more than
   ...  exactly one considered child element in any given parent.
   [Tags]  ex0  e0t2
-  # Create dictionaries to store data for final verification.
   &{table_dict}  Create Dictionary
   &{list_dict}  Create Dictionary
-  # Open the html file in browser.
   New Page  file://${HTML_FILE}
-  # Find table elements from page.
   ${table_elements}  Get Elements  xpath=//table
-  # For each table...
   FOR  ${table}  IN  @{table_elements}
-    # ... find child elements.
     ${table_child_elements}  Get Elements  ${table}//*
-    # For each child element, check if it is a relevant element.
-    # If it is, add the element into a corresponding
-    # dict as element : style.
     @{tr_list}  Create List
     @{td_list}  Create List
     @{th_list}  Create List
@@ -121,30 +113,13 @@ E0-T2-4: Specificity is used in styling
     END
     Set To Dictionary  ${table_dict}  tr  ${tr_list}  td  ${td_list}  th  ${th_list}
   END
-  # Verify that at least one row or data cell differs in style from its peers.
-  # Interpreting the tasker strictly, the following scenarios are possible:
-  # <tr> - 1) all tr are the same; 2) n-1 tr are the same and 1 tr unique
-  # <td> / <th> - 1) n-1 are the same and 1 is unique; 2) all the td / th are the same.
-  # Regarding elements, the scenarios must correspond. If tr is case 1, td/th must also be case 1.
-  # If a looser interpretation is allowed we may assume that the tasker simply asks
-  # the student apply specificity. In this case - as far as tester's understanding -
-  # each individual cell of an individual row could be unique in styling.
-  # We will apply the loose interpretation here and assume that
-  # we could i.e. find only unique stylings and still deduce that specificity
-  # is used as required since the elements are all from the same parent.
   ${table_specificity}  Verify Specificity Use Based On Styles Count  ${table_dict}  tr
   IF  not ${table_specificity}
     ${table_specificity}  Verify Specificity Use Based On Styles Count  ${table_dict}  td
   END
-  # Check cells if specificity not found from rows.
   IF  not ${table_specificity}
     ${table_specificity}  Verify Specificity Use Based On Styles Count  ${table_dict}  th
   END
-  # Next check the use of specificity in lists.
-  # With lists we will assume the tasker truly means <li> element when
-  # it mentions 'one item' in list should be styled by using specificity.
-  # This means the test will flunk solutions that have styled the content
-  # itself within the <li> element instead of styling the element.
   ${ol_elements}  Get Elements  xpath=//ol[not(parent::li)]
   ${ul_elements}  Get Elements  xpath=//ul[not(parent::li)]
   ${menu_elements}  Get Elements  xpath=//menu[not(parent::li)]
