@@ -20,16 +20,10 @@ E0-T1-1: Verify Html Anatomy
   ...  - Html element contains <body></body> element within
   ...  Passing this assessment is mandatory for scoring in E0.
   [Tags]  ex0  e0t1  full
-  # Check source code for elements: html, head, body
   ${html_contents}  Get File  ${HTML_FILE}
-  # Open a browser session with the static html page
   New Page  file://${HTML_FILE}
-  # Take a screenshot of the page for records and added transparency / visibility
   Take Screenshot  filename=${STUDENT_ID}
-  # With above steps the test case verifies that the file could function as a valid
-  # static page when viewed on a browser.
   Close Page
-  # Verify html, head and body elements and the doctype declaration
   ${html_element}  Get Regexp Matches  ${html_contents}  <html>|<\\/html>
   ${head_element}  Get Regexp Matches  ${html_contents}  <head>|<\\/head>
   ${body_element}  Get Regexp Matches  ${html_contents}  <body>|<\\/body>
@@ -48,15 +42,12 @@ E0-T1-2: Page contains a valid anchor element
   ...  or not or which types of links are created and thus no such assessments
   ...  are included in this test case for functionality.
   [Tags]  ex0  e0t1  full
-  # Find anchor elements and their href attributes from source
   ${anchor_href_data}  Find Elements With Attribute  ${HTML_FILE}  a  href
-  # Verify at least one anchor element with a href attribute is found
   Should Not Be Empty  ${anchor_href_data}
 
 E0-T1-3-1: Page contains a table element
   [Documentation]  Page has at least one table element
   [Tags]  ex0  e0t1  full
-  # Find table elements from the raw html file
   ${table_elements}  Find Elements From Raw Source  ${html_file}  table
   Should Not Be Empty  ${table_elements}
 
@@ -78,11 +69,8 @@ E0-T1-3-2: Page contains a proper table element
   ...  then the relation between these elements should be as presented.
   ...  If <tbody> is not used then <tr> can be used directly under <table>.
   [Tags]  ex0  e0t1  full
-  # Find table elements from the raw html file
   ${table_elements}  Find Elements From Raw Source  ${html_file}  table
-  # Validate table hierarchy of each table
   ${number_of_proper_tables}  Verify Table Elements  ${table_elements}
-  # Verify at least one table passed the structure test.
   Should Be True  ${number_of_proper_tables} > 0
 
 E0-T1-4-1: Page contains a list element
@@ -162,14 +150,12 @@ E0-T2-3-1: List style is defined
   [Tags]  ex0  e0t2  full
   @{list_ids}  Create List
   @{list_classes}  Create List
-  # Gather list elements from html file
   ${ul_list_elements}  Find Elements From Html  ${HTML_FILE}  ul
   ${ol_list_elements}  Find Elements From Html  ${HTML_FILE}  ol
   ${menu_list_elements}  Find Elements From Html  ${HTML_FILE}  menu
   @{all_list_elements}  Create List  @{ul_list_elements}  @{ol_list_elements}  @{menu_list_elements}
   ${list_ids}  Store Id References  ${all_list_elements}
   ${list_classes}  Store Class References  ${all_list_elements}
-  # Verify defined list styles
   ${css_file_contents}  Get File  ${CSS_FILE}
   ${list_styles_found}  Verify Defined List Styles  ${css_file_contents}  ${list_ids}  ${list_classes}
   Should Be True  ${list_styles_found}
@@ -192,11 +178,9 @@ E0-T2-3-2: Table style is defined
   [Tags]  ex0  e0t2  full
   @{table_ids}  Create List
   @{table_classes}  Create List
-  # Gather table elements from html file
   ${table_elements}  Find Elements From Html  ${HTML_FILE}  table
   ${table_ids}  Store Id References  ${table_elements}
   ${table_classes}  Store Class References  ${table_elements}
-  # Verify defined table styles
   ${css_file_contents}  Get File  ${CSS_FILE}
   ${table_styles_found}  Verify Defined Table Styles  ${css_file_contents}  ${table_ids}  ${table_classes}
   Should Be True  ${table_styles_found}
@@ -232,9 +216,10 @@ E0-T2-6-1: Element position options are used
   ...  The following declarations are searched to determine positional styling:
   ...  margin, padding, position, top, right, left, bottom, align.
   [Tags]  ex0  e0t2  full
+  ${style_regexp}  Set Variable  margin\\s*?:|margin-[a-zA-Z].*:|padding\\s*?:|padding-[a-zA-Z].*?:|position\\s*?:|[a-zA-Z].*?-align\\s*?:|width:|.*?height:|size:
   @{position_support_words}  Create List  margin  padding  position  align  top  right  left  bottom
   ${css_contents}  Get File  ${CSS_FILE}
-  ${found_styles}  Get Regexp Matches  ${css_contents}  margin\\s*?:|margin-[a-zA-Z].*:|padding\\s*?:|padding-[a-zA-Z].*?:|position\\s*?:|[a-zA-Z].*?-align\\s*?:|width:|.*?height:|size:
+  ${found_styles}  Get Regexp Matches  ${css_contents}  ${style_regexp}
   ${styles_string}  Set Variable
   FOR  ${item}  IN  @{found_styles}
     ${new_item}  Remove String  ${item}  ${SPACE}
@@ -247,9 +232,10 @@ E0-T2-6-2: Element sizing options are used
   ...  The following declarations are searched to determine size styling:
   ...  height, width, font-size.
   [Tags]  ex0  e0t2  full
+  ${style_regexp}  Set Variable  margin\\s*?:|margin-[a-zA-Z].*:|padding\\s*?:|padding-[a-zA-Z].*?:|position\\s*?:|[a-zA-Z].*?-align\\s*?:|width:|.*?height:|size:
   @{size_support_words}  Create List  height  width  size
   ${css_contents}  Get File  ${CSS_FILE}
-  ${found_styles}  Get Regexp Matches  ${css_contents}  margin\\s*?:|margin-[a-zA-Z].*:|padding\\s*?:|padding-[a-zA-Z].*?:|position\\s*?:|[a-zA-Z].*?-align\\s*?:|width:|.*?height:|size:
+  ${found_styles}  Get Regexp Matches  ${css_contents}  ${style_regexp}
   ${styles_string}  Set Variable
   FOR  ${item}  IN  @{found_styles}
     ${new_item}  Remove String  ${item}  ${SPACE}

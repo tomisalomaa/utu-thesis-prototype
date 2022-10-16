@@ -37,10 +37,6 @@ E1-T2-1: Feedback App Contains Three Buttons
 E1-T2-2: Feedback App Statistics Are Hidden When Empty
   [Documentation]  Statistics should only be displayed when user has given feedback.
   [Tags]  e1t2
-  # Note: this test case and the next one will always run in the same suite;
-  # if this one passes prior to running t2-4, and then the t2-4 passes,
-  # that means the statistics were not available here but they became availabe
-  # in the next case as we continued with the same browser session.
   Take Screenshot
   Get Element Count  xpath=//*[text() = '0']  ==  0
   Get Element Count  xpath=//*[text() = 'average']  ==  0
@@ -58,8 +54,6 @@ E1-T2-4: Feedback App Displays Statistics
   ${button_bad}  Get Element  xpath=//button[text() = 'huono']|//button[text() = 'Huono']|//button[text() = 'bad']|//button[text() = 'Bad']|//button[text() = 'poor']|//button[text() = 'Poor']
   Click  ${button_good}
   Take Screenshot
-  # Statistics should contain...
-  # good: 1 & average: 1
   Get Element Count  xpath=//*[text() = '1']  ==  2
   # neutral: 0 & bad: 0
   Get Element Count  xpath=//*[text() = '0']  ==  2
@@ -107,14 +101,6 @@ E1-T2-5: Feedback App Statistics Contents Are In HTML Table
   ...  The table should be properly constructed / organized in terms of
   ...  element hierarchy.
   [Tags]  e1t2
-  # Note: as this is the final test case of the suite, the browser state
-  # is as it is left in the previous test case: statistics are present.
-  # As such the actual updating of values would already be verified through
-  # completing the previous two test cases. If this test case needs to be
-  # entirely atomic, then the manipulation of feedback would also
-  # need to be added as a test part here. Now, however, we will consider
-  # cases as a suite as this will be included in any and all tags with
-  # the required pre-tests to achieve the necessary state of visible feedback.
   ${table_elements}  Get Elements  xpath=//table
   ${number_of_proper_tables}  Verify Table Elements  ${table_elements}
   Take Screenshot
