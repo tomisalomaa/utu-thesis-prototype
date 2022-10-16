@@ -38,16 +38,18 @@ E2-T2-5: Initial State Is Fetched From Server
 E2-T2-1: Prevent Adding Already Existing Name UI
   [Documentation]  If the directory already includes the name that user tries to add, prevent adding it.
   [Tags]  e2t2
+  ${test_name}  Set Variable  Testi Testsson
+  ${test_num}  Set Variable  012-3456789
   Take Screenshot
-  Get Element Count  xpath=//*[text() = 'Testi Testsson']  ==  0
-  Fill Text  (//input)[1]  Testi Testsson
-  Fill Text  (//input)[2]  012-3456789
+  Get Element Count  xpath=//*[text() = '${test_name}']  ==  0
+  Fill Text  (//input)[1]  ${test_name}
+  Fill Text  (//input)[2]  ${test_num}
   Click  (//button[@type])[1]
-  Get Element Count  xpath=//*[text() = 'Testi Testsson']  ==  1
-  Fill Text  (//input)[1]  Testi Testsson
-  Fill Text  (//input)[2]  012-3456789
+  Get Element Count  xpath=//*[text() = '${test_name}']  ==  1
+  Fill Text  (//input)[1]  ${test_name}
+  Fill Text  (//input)[2]  ${test_num}
   Click  (//button[@type])[1]
-  ${test_elements_found}  Get Element Count  xpath=//*[text() = 'Testi Testsson']
+  ${test_elements_found}  Get Element Count  xpath=//*[text() = '${test_name}']
   Set Global Variable  ${TEST_ELEMENTS_LEFT}  ${test_elements_found}
   Should Be Equal As Integers  ${test_elements_found}  1
 
