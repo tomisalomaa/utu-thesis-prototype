@@ -5,6 +5,17 @@ The goal of this system is to take student submissions as initial input and then
 
 System has been built using Bash, Robot Framework and Python.
 
+Shield: [![CC BY 4.0][cc-by-shield]][cc-by]
+
+This work is licensed under a
+[Creative Commons Attribution 4.0 International License][cc-by].
+
+[![CC BY 4.0][cc-by-image]][cc-by]
+
+[cc-by]: http://creativecommons.org/licenses/by/4.0/
+[cc-by-image]: https://i.creativecommons.org/l/by/4.0/88x31.png
+[cc-by-shield]: https://img.shields.io/badge/License-CC%20BY%204.0-lightgrey.svg
+
 ## **Contents**
 ### 1) **Install**: _How the setup was done during development_
 ### 2) **Use**: _How the prototype was used while testing_
